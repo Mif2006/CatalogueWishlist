@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sun, Moon, Menu, X, Store, User, ShoppingBag, Heart } from 'lucide-react';
+import Image from 'next/image';
 import Dashboard from './components/Dashboard';
 import CatalogPage from './pages/CatalogPage';
-import { CartProvider } from './context/CartContext';
 import BackToTop from './components/BackToTop';
 import Cart from './components/Cart';
 import MinimizedNavbar from './components/MinimizedNavbar';
@@ -41,8 +41,7 @@ function App() {
   }, []);
 
   return (
-    <CartProvider>
-      <div className="min-h-screen bg-jewelry-cream dark:bg-dark-bg overflow-x-hidden transition-colors duration-300">
+    <div className="min-h-screen bg-jewelry-cream dark:bg-dark-bg overflow-x-hidden transition-colors duration-300">
         <MinimizedNavbar
           darkMode={darkMode}
           toggleDarkMode={() => setDarkMode(prev => !prev)}
@@ -197,7 +196,6 @@ function App() {
         )}
         <BackToTop />
       </div>
-    </CartProvider>
   );
 }
 

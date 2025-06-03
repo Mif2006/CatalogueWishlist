@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingCart, X, Plus, Minus, Trash2 } from 'lucide-react';
+import Image from 'next/image';
 import { useCart } from '../context/CartContext';
 
 const Cart: React.FC = () => {
@@ -78,10 +79,12 @@ const Cart: React.FC = () => {
                     className="flex space-x-4"
                   >
                     <div className="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0">
-                      <img
+                      <Image
                         src={item.imageUrl}
                         alt={item.name}
-                        className="w-full h-full object-cover"
+                        width={96}
+                        height={96}
+                        className="object-cover"
                       />
                     </div>
                     <div className="flex-1">

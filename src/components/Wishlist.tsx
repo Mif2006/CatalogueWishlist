@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, Share2, Trash2 } from 'lucide-react';
+import Image from 'next/image';
 import { useCart } from '../context/CartContext';
 import type { WishlistItem } from '../types';
 
@@ -23,10 +24,11 @@ const Wishlist: React.FC<WishlistProps> = ({ items }) => {
           className="bg-white dark:bg-dark-card rounded-2xl shadow-elegant dark:shadow-dark-elegant overflow-hidden group"
         >
           <div className="relative h-96 overflow-hidden">
-            <img
+            <Image
               src={item.imageUrl}
               alt={item.name}
-              className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+              fill
+              className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             <div className="absolute bottom-4 right-4 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">

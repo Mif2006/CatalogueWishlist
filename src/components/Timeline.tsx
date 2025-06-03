@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { motion, useDragControls } from 'framer-motion';
 import { format } from 'date-fns';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import Image from 'next/image';
 import { Purchase } from '../types';
 
 interface TimelineProps {
@@ -384,10 +385,12 @@ const Timeline: React.FC<TimelineProps> = ({ purchases, darkMode }) => {
                     }}
                   >
                     <div className="h-24 md:h-28 w-full overflow-hidden">
-                      <img 
+                      <Image 
                         src={purchase.imageUrl} 
                         alt={purchase.name}
-                        className="h-full w-full object-cover transition-all duration-700 ease-out hover:scale-110 hover:rotate-1"
+                        width={112}
+                        height={112}
+                        className="object-cover transition-all duration-700 ease-out hover:scale-110 hover:rotate-1"
                       />
                     </div>
                     <div className="p-2 md:p-3">

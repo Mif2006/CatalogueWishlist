@@ -21,7 +21,21 @@ function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMinimizedNavVisible, setIsMinimizedNavVisible] = useState(false);
   const [hasEnteredSite, setHasEnteredSite] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [session, setSession] = useState(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   useEffect(() => {
     // Update class on document
@@ -68,8 +82,8 @@ function App() {
           }} />
         ) : (
           <>
-            {currentPage === 'dashboard' && !isAuthenticated ? (
-              <AuthPage onAuthSuccess={() => setIsAuthenticated(true)} />
+            {currentPage === 'dashboard' && !session ? (
+              <AuthPage onAuthSuccess={() => {}} />
             ) : (
               <>
             <MinimizedNavbar

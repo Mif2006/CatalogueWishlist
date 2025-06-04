@@ -6,6 +6,13 @@ export interface User {
   membershipLevel: string;
 }
 
+export interface Profile {
+  id: string;
+  name: string | null;
+  address: string | null;
+  updated_at: string;
+}
+
 export interface Purchase {
   id: string;
   name: string;

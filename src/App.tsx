@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sun, Moon, Menu, X, Store, User, ShoppingBag, Heart } from 'lucide-react';
+import { X, Store, User, ShoppingBag, Heart } from 'lucide-react';
 import Dashboard from './components/Dashboard';
 import LandingPage from './pages/LandingPage';
 import CatalogPage from './pages/CatalogPage';
 import { CartProvider } from './context/CartContext';
 import BackToTop from './components/BackToTop';
-import Cart from './components/Cart';
+import Navbar from './components/Navbar';
 import MinimizedNavbar from './components/MinimizedNavbar';
 
 function App() {
@@ -45,6 +45,14 @@ function App() {
   return (
     <CartProvider>
       <div className="min-h-screen bg-jewelry-cream dark:bg-dark-bg overflow-x-hidden transition-colors duration-300">
+        <Navbar
+          darkMode={darkMode}
+          setDarkMode={setDarkMode}
+          currentPage={hasEnteredSite ? currentPage : 'landing'}
+          setCurrentPage={setCurrentPage}
+          setIsMobileMenuOpen={setIsMobileMenuOpen}
+          hasEnteredSite={hasEnteredSite}
+        />
         {!hasEnteredSite ? (
           <LandingPage onNavigate={(page) => {
             setCurrentPage(page);
@@ -52,70 +60,12 @@ function App() {
           }} />
         ) : (
           <>
-        <MinimizedNavbar
-          darkMode={darkMode}
-          toggleDarkMode={() => setDarkMode(prev => !prev)}
-          setIsMobileMenuOpen={setIsMobileMenuOpen}
-          isVisible={isMinimizedNavVisible}
-        />
-        <header className="bg-white dark:bg-dark-card shadow-elegant dark:shadow-dark-elegant sticky top-0 z-30 transition-colors duration-300">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-            <div className="flex items-center space-x-8">
-              <motion.div 
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 0.5 }}
-                className="flex items-center space-x-4"
-              >
-                <div className="h-10 w-10 md:h-12 md:w-12 rounded-full bg-purple-gradient flex items-center justify-center">
-                  <span className="text-white font-serif text-lg md:text-xl">L</span>
-                </div>
-                <h1 className="text-xl md:text-2xl font-serif text-jewelry-dark dark:text-dark-text">
-                  Lumina <span className="text-purple-500">Jewelry</span>
-                </h1>
-              </motion.div>
-              
-              <nav className="hidden md:flex items-center space-x-6">
-                <button
-                  onClick={() => setCurrentPage('dashboard')}
-                  className={`text-sm font-medium transition-colors ${
-                    currentPage === 'dashboard'
-                      ? 'text-purple-500 dark:text-purple-400'
-                      : 'text-gray-600 dark:text-dark-muted hover:text-purple-500 dark:hover:text-purple-400'
-                  }`}
-                >
-                  Dashboard
-                </button>
-                <button
-                  onClick={() => setCurrentPage('catalog')}
-                  className={`text-sm font-medium transition-colors ${
-                    currentPage === 'catalog'
-                      ? 'text-purple-500 dark:text-purple-400'
-                      : 'text-gray-600 dark:text-dark-muted hover:text-purple-500 dark:hover:text-purple-400'
-                  }`}
-                >
-                  Catalog
-                </button>
-              </nav>
-            </div>
-            
-            <div className="flex items-center space-x-4">
-              <button
-                className="block md:hidden p-2 text-gray-500 hover:text-purple-500 dark:text-dark-muted dark:hover:text-purple-light transition-colors"
-                onClick={() => setIsMobileMenuOpen(true)}
-              >
-                <Menu size={20} />
-              </button>
-              <button 
-                className="p-2 text-gray-500 hover:text-purple-500 dark:text-dark-muted dark:hover:text-purple-light transition-colors"
-                onClick={() => setDarkMode(prev => !prev)}
-              >
-                {darkMode ? <Sun size={20} /> : <Moon size={20} />}
-              </button>
-              <Cart />
-            </div>
-          </div>
-        </header>
+            <MinimizedNavbar
+              darkMode={darkMode}
+              toggleDarkMode={() => setDarkMode(prev => !prev)}
+              setIsMobileMenuOpen={setIsMobileMenuOpen}
+              isVisible={isMinimizedNavVisible}
+            />
         
         {/* Mobile Sidebar */}
         <AnimatePresence>

@@ -4,9 +4,9 @@ import { ArrowRight, Diamond, Shield, Star, Truck } from 'lucide-react';
 
 const LandingPage: React.FC<{ onNavigate: (page: 'catalog' | 'dashboard') => void }> = ({ onNavigate }) => {
   return (
-    <div className="min-h-screen bg-jewelry-cream dark:bg-dark-bg">
+    <div className="min-h-[calc(100vh-76px)] bg-jewelry-cream dark:bg-dark-bg">
       {/* Hero Section */}
-      <div className="relative h-screen">
+      <div className="relative h-[calc(100vh-76px)]">
         <div className="absolute inset-0">
           <img 
             src="https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?auto=format&fit=crop&q=80&w=3270"

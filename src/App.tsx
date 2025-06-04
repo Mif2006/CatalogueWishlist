@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sun, Moon, Menu, X, Store, User, ShoppingBag, Heart } from 'lucide-react';
 import Dashboard from './components/Dashboard';
+import LandingPage from './pages/LandingPage';
 import CatalogPage from './pages/CatalogPage';
 import { CartProvider } from './context/CartContext';
 import BackToTop from './components/BackToTop';
@@ -18,6 +19,7 @@ function App() {
   const [currentPage, setCurrentPage] = useState<'dashboard' | 'catalog'>('dashboard');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMinimizedNavVisible, setIsMinimizedNavVisible] = useState(false);
+  const [hasEnteredSite, setHasEnteredSite] = useState(false);
 
   useEffect(() => {
     // Update class on document
@@ -43,6 +45,13 @@ function App() {
   return (
     <CartProvider>
       <div className="min-h-screen bg-jewelry-cream dark:bg-dark-bg overflow-x-hidden transition-colors duration-300">
+        {!hasEnteredSite ? (
+          <LandingPage onNavigate={(page) => {
+            setCurrentPage(page);
+            setHasEnteredSite(true);
+          }} />
+        ) : (
+          <>
         <MinimizedNavbar
           darkMode={darkMode}
           toggleDarkMode={() => setDarkMode(prev => !prev)}
@@ -196,6 +205,8 @@ function App() {
           <CatalogPage />
         )}
         <BackToTop />
+          </>
+        )}
       </div>
     </CartProvider>
   );

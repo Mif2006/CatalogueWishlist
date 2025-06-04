@@ -4,7 +4,7 @@ const supabaseUrl = 'https://oaxbcgytpckgpwdyrjbx.supabase.co';
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 const redirectTo = import.meta.env.MODE === 'production' 
   ? 'https://serene-starburst-c1aeca.netlify.app/auth/callback'
-  : 'http://localhost:5173/auth/callback';
+  : 'http://localhost:5175/auth/callback';
 
 if (!supabaseAnonKey) {
   throw new Error('Missing Supabase environment variables');

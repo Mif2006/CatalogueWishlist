@@ -68,7 +68,7 @@ const LandingPage: React.FC<{ onNavigate: (page: 'catalog' | 'dashboard') => voi
               transition={{ duration: 0.8 }}
               className="text-3xl md:text-4xl font-serif text-jewelry-dark dark:text-dark-text mb-4"
             >
-              Why Choose Lumina
+              Why Choose Zaavg
             </motion.h2>
             <motion.p 
               initial={{ opacity: 0, y: 20 }}

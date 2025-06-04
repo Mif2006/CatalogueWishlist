@@ -31,11 +31,18 @@ const Navbar: React.FC<NavbarProps> = ({
             className="flex items-center space-x-4"
           >
             <div className="h-10 w-10 md:h-12 md:w-12 rounded-full bg-purple-gradient flex items-center justify-center">
-              <span className="text-white font-serif text-lg md:text-xl">L</span>
+              <span className="text-white font-serif text-lg md:text-xl">Z</span>
             </div>
-            <h1 className={`text-xl md:text-2xl font-serif ${currentPage === 'landing' ? 'text-white' : 'text-jewelry-dark dark:text-dark-text'}`}>
-              Lumina <span className="text-purple-500">Jewelry</span>
-            </h1>
+            <button
+              onClick={() => {
+                if (hasEnteredSite) {
+                  window.location.reload();
+                }
+              }}
+              className={`text-xl md:text-2xl font-serif ${currentPage === 'landing' ? 'text-white' : 'text-jewelry-dark dark:text-dark-text'}`}
+            >
+              Zaavg
+            </button>
           </motion.div>
           
           {hasEnteredSite && (

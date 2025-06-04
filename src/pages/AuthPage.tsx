@@ -1,12 +1,14 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { SignIn } from '@clerk/clerk-react';
+import { SignIn, useClerk } from '@clerk/clerk-react';
 
 interface AuthPageProps {
   onAuthSuccess: () => void;
 }
 
 const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
+  const { setActive } = useClerk();
+
   return (
     <div className="min-h-screen bg-jewelry-cream dark:bg-dark-bg flex items-center justify-center p-4">
       <div className="w-full max-w-md">
@@ -31,13 +33,16 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
             </p>
 
             <SignIn 
-              redirectUrl={window.location.origin}
-              signUpUrl="/sign-up"
+              afterSignInUrl="/"
+              afterSignUpUrl="/"
+              routing="hash"
               appearance={{
                 elements: {
                   formButtonPrimary: 
                     "bg-purple-gradient hover:opacity-90 transition-opacity",
                   card: "bg-transparent shadow-none",
+                  headerTitle: "text-2xl font-serif text-center text-jewelry-dark dark:text-dark-text",
+                  headerSubtitle: "text-gray-600 dark:text-dark-muted text-center",
                   dividerLine: "bg-gray-200 dark:bg-dark-accent",
                   dividerText: "text-gray-500 dark:text-dark-muted",
                   socialButtonsBlockButton: 
@@ -50,7 +55,6 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
                     "text-purple-500 dark:text-purple-400 hover:underline",
                 }
               }}
-              signInUrl="/sign-in"
             />
           </div>
         </motion.div>

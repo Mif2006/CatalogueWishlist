@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Store, User, ShoppingBag, Heart } from 'lucide-react';
-import { ClerkProvider, SignedIn, SignedOut, useAuth } from '@clerk/clerk-react';
+import { ClerkProvider, SignedIn, SignedOut } from '@clerk/clerk-react';
 import Dashboard from './components/Dashboard';
 import AuthPage from './pages/AuthPage';
 import LandingPage from './pages/LandingPage';
@@ -46,7 +46,16 @@ function App() {
   }, []);
 
   return (
-    <ClerkProvider publishableKey={import.meta.env.VITE_CLERK_PUBLISHABLE_KEY}>
+    <ClerkProvider
+      publishableKey={import.meta.env.VITE_CLERK_PUBLISHABLE_KEY}
+      appearance={{
+        baseTheme: darkMode ? "dark" : "light",
+        variables: {
+          colorPrimary: "#8B5CF6",
+          colorTextOnPrimaryBackground: "white"
+        }
+      }}
+    >
     <CartProvider>
       {!import.meta.env.VITE_CLERK_PUBLISHABLE_KEY ? (
         <div className="min-h-screen bg-jewelry-cream dark:bg-dark-bg flex items-center justify-center p-4">

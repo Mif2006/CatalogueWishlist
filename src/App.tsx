@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { supabase } from './lib/supabase';
 import { X, Store, User, ShoppingBag, Heart } from 'lucide-react';
 import Dashboard from './components/Dashboard';
 import AuthPage from './pages/AuthPage';

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Lock, Eye, EyeOff, Loader, Chrome } from 'lucide-react';
-import { supabase } from '../lib/supabase';
 
 interface AuthPageProps {
   onAuthSuccess: () => void;
@@ -21,13 +20,14 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
     setError('');
 
     try {
-      const { data, error } = isLogin
-        ? await supabase.auth.signInWithPassword({ email, password })
-        : await supabase.auth.signUp({ email, password });
-
-      if (error) throw error;
-      if (data.user) {
+      // Simulate authentication delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // For demo purposes, accept any valid email/password
+      if (email && password.length >= 6) {
         onAuthSuccess();
+      } else {
+        throw new Error('Invalid credentials');
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
@@ -38,13 +38,9 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
 
   const handleGoogleSignIn = async () => {
     try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: window.location.origin
-        }
-      });
-      if (error) throw error;
+      // Simulate authentication delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      onAuthSuccess();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     }
@@ -125,7 +121,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
                 className="w-full py-3 bg-purple-gradient rounded-xl text-white font-medium hover:opacity-90 transition-opacity flex items-center justify-center space-x-2 disabled:opacity-70"
               >
                 {loading ? (
-                  <Loader className="animate-spin\" size={20} />
+                  <Loader className="animate-spin" size={20} />
                 ) : (
                   <span>{isLogin ? 'Sign In' : 'Create Account'}</span>
                 )}

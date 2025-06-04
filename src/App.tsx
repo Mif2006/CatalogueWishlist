@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { supabase } from './lib/supabase';
 import { X, Store, User, ShoppingBag, Heart } from 'lucide-react';
 import Dashboard from './components/Dashboard';
 import AuthPage from './pages/AuthPage';
@@ -22,21 +21,7 @@ function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMinimizedNavVisible, setIsMinimizedNavVisible] = useState(false);
   const [hasEnteredSite, setHasEnteredSite] = useState(false);
-  const [session, setSession] = useState(null);
-
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-    });
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     // Update class on document
@@ -83,8 +68,8 @@ function App() {
           }} />
         ) : (
           <>
-            {currentPage === 'dashboard' && !session ? (
-              <AuthPage onAuthSuccess={() => {}} />
+            {currentPage === 'dashboard' && !isAuthenticated ? (
+              <AuthPage onAuthSuccess={() => setIsAuthenticated(true)} />
             ) : (
               <>
             <MinimizedNavbar

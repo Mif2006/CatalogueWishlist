@@ -1,13 +1,12 @@
 import React from 'react';
 import { format } from 'date-fns';
 import { motion } from 'framer-motion';
-import { User, ShoppingBag, Heart, Settings, LogOut, Menu, Store } from 'lucide-react';
+import { User, ShoppingBag, Heart, Settings, LogOut } from 'lucide-react';
 import ProfilePage from '../pages/ProfilePage';
 import Wishlist from './Wishlist';
 import Timeline from './Timeline';
-import Catalog from './Catalog';
 import { useCart } from '../context/CartContext';
-import { userData, purchaseData, wishlistData, catalogData } from '../data/mockData';
+import { userData, purchaseData, wishlistData } from '../data/mockData';
 
 interface DashboardProps {
   darkMode: boolean;
@@ -16,7 +15,7 @@ interface DashboardProps {
 
 const Dashboard: React.FC<DashboardProps> = ({ darkMode, setDarkMode }) => {
   const totalSpent = purchaseData.reduce((total, item) => total + item.price, 0);
-  const [activeTab, setActiveTab] = React.useState<'purchases' | 'wishlist' | 'catalog' | 'profile'>('profile');
+  const [activeTab, setActiveTab] = React.useState<'purchases' | 'wishlist' | 'profile'>('profile');
   const { state: cartState, dispatch: cartDispatch } = useCart();
   
   const toggleDarkMode = () => {
@@ -29,17 +28,6 @@ const Dashboard: React.FC<DashboardProps> = ({ darkMode, setDarkMode }) => {
         {/* Mobile Tab Navigation */}
         <div className="lg:hidden mb-6 bg-white dark:bg-dark-card shadow-elegant dark:shadow-dark-elegant rounded-xl p-4">
           <div className="flex flex-wrap gap-2">
-            <button 
-              onClick={() => setActiveTab('catalog')}
-              className={`flex-1 flex items-center justify-center space-x-2 px-3 py-2 ${
-                activeTab === 'catalog'
-                  ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-500 dark:text-purple-300'
-                  : 'text-jewelry-dark dark:text-dark-text hover:bg-purple-100 dark:hover:bg-purple-900/20'
-              } rounded-lg transition-colors text-sm`}
-            >
-              <Store size={16} />
-              <span>Catalog</span>
-            </button>
             <button 
               onClick={() => setActiveTab('profile')}
               className={`flex-1 flex items-center justify-center space-x-2 px-3 py-2 ${
@@ -100,17 +88,6 @@ const Dashboard: React.FC<DashboardProps> = ({ darkMode, setDarkMode }) => {
             </div>
             
             <div className="space-y-1">
-              <button 
-                onClick={() => setActiveTab('catalog')}
-                className={`w-full flex items-center space-x-3 px-4 py-3 ${
-                  activeTab === 'catalog'
-                    ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-500 dark:text-purple-300'
-                    : 'text-jewelry-dark dark:text-dark-text hover:bg-purple-100 dark:hover:bg-purple-900/20'
-                } rounded-lg transition-colors`}
-              >
-                <Store size={18} className="text-purple-500 dark:text-purple-400" />
-                <span>Catalog</span>
-              </button>
               <button
                 onClick={() => setActiveTab('profile')}
                 className={`w-full flex items-center space-x-3 px-4 py-3 ${
@@ -220,23 +197,7 @@ const Dashboard: React.FC<DashboardProps> = ({ darkMode, setDarkMode }) => {
             </motion.div>
             
             {/* Content Section */}
-            {activeTab === 'catalog' ? (
-              <motion.div 
-                initial={{ y: 50, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.6 }}
-                className="bg-white dark:bg-dark-card shadow-elegant dark:shadow-dark-elegant rounded-2xl p-4 md:p-6 mb-8 overflow-hidden transition-colors duration-300"
-              >
-                <div className="flex justify-between items-center mb-6 relative">
-                  <h2 className="text-lg md:text-xl font-serif text-jewelry-dark dark:text-dark-text">Our Collection</h2>
-                  <div className="text-xs md:text-sm text-gray-500 dark:text-dark-muted">
-                    {catalogData.length} items
-                  </div>
-                </div>
-                
-                <Catalog items={catalogData} />
-              </motion.div>
-            ) : activeTab === 'profile' ? (
+            {activeTab === 'profile' ? (
               <motion.div 
                 initial={{ y: 50, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}

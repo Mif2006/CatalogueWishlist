@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Store, User, ShoppingBag, Heart } from 'lucide-react';
-import { ClerkProvider, SignedIn, SignedOut } from '@clerk/clerk-react';
+import { ClerkProvider, SignedIn, SignedOut, useAuth } from '@clerk/clerk-react';
 import Dashboard from './components/Dashboard';
 import AuthPage from './pages/AuthPage';
 import LandingPage from './pages/LandingPage';
@@ -48,7 +48,20 @@ function App() {
   return (
     <ClerkProvider publishableKey={import.meta.env.VITE_CLERK_PUBLISHABLE_KEY}>
     <CartProvider>
-      <div className="min-h-screen bg-jewelry-cream dark:bg-dark-bg overflow-x-hidden transition-colors duration-300">
+      {!import.meta.env.VITE_CLERK_PUBLISHABLE_KEY ? (
+        <div className="min-h-screen bg-jewelry-cream dark:bg-dark-bg flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-dark-card shadow-elegant dark:shadow-dark-elegant rounded-2xl p-6 max-w-md w-full">
+            <h2 className="text-xl font-serif text-jewelry-dark dark:text-dark-text mb-4">Environment Error</h2>
+            <p className="text-gray-600 dark:text-dark-muted mb-4">
+              Missing VITE_CLERK_PUBLISHABLE_KEY in environment variables. Please add it to your .env file.
+            </p>
+            <pre className="bg-gray-100 dark:bg-dark-accent p-4 rounded-lg text-sm mb-4 overflow-x-auto">
+              VITE_CLERK_PUBLISHABLE_KEY=your_publishable_key_here
+            </pre>
+          </div>
+        </div>
+      ) : (
+        <div className="min-h-screen bg-jewelry-cream dark:bg-dark-bg overflow-x-hidden transition-colors duration-300">
         <Navbar
           darkMode={darkMode}
           setDarkMode={setDarkMode}
@@ -181,6 +194,7 @@ function App() {
           </>
         )}
       </div>
+      )}
     </CartProvider>
     </ClerkProvider>
   );

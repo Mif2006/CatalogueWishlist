@@ -2,6 +2,9 @@ import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = 'https://oaxbcgytpckgpwdyrjbx.supabase.co';
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+const redirectTo = import.meta.env.MODE === 'production' 
+  ? 'https://serene-starburst-c1aeca.netlify.app'
+  : 'http://localhost:5173';
 
 if (!supabaseAnonKey) {
   throw new Error('Missing Supabase environment variables');
@@ -9,8 +12,15 @@ if (!supabaseAnonKey) {
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
-    persistSession: true,
     autoRefreshToken: true,
-    detectSessionInUrl: true
+    persistSession: true,
+    detectSessionInUrl: true,
+    flowType: 'pkce',
+    global: {
+      headers: {
+        'x-application-name': 'zaavg',
+      },
+    },
+    redirectTo,
   }
 });

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Store, User, ShoppingBag, Heart } from 'lucide-react';
 import Dashboard from './components/Dashboard';
+import AuthPage from './pages/AuthPage';
 import LandingPage from './pages/LandingPage';
 import CatalogPage from './pages/CatalogPage';
 import { CartProvider } from './context/CartContext';
@@ -20,6 +21,7 @@ function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMinimizedNavVisible, setIsMinimizedNavVisible] = useState(false);
   const [hasEnteredSite, setHasEnteredSite] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     // Update class on document
@@ -56,10 +58,20 @@ function App() {
         {!hasEnteredSite ? (
           <LandingPage onNavigate={(page) => {
             setCurrentPage(page);
-            setHasEnteredSite(true);
+            if (page === 'catalog') {
+              setHasEnteredSite(true);
+            } else {
+              // If dashboard is selected, show auth page
+              setCurrentPage('dashboard');
+              setHasEnteredSite(true);
+            }
           }} />
         ) : (
           <>
+            {currentPage === 'dashboard' && !isAuthenticated ? (
+              <AuthPage onAuthSuccess={() => setIsAuthenticated(true)} />
+            ) : (
+              <>
             <MinimizedNavbar
               darkMode={darkMode}
               toggleDarkMode={() => setDarkMode(prev => !prev)}
@@ -155,6 +167,8 @@ function App() {
           <CatalogPage />
         )}
         <BackToTop />
+              </>
+            )}
           </>
         )}
       </div>

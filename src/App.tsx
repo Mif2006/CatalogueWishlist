@@ -133,7 +133,7 @@ function App() {
                     }`}
                   >
                     <Store size={20} className="text-purple-500 dark:text-purple-400" />
-                    <span>Catalogoooo</span>
+                    <span>Catalog</span>
                   </button>
                   <button
                     onClick={() => {

@@ -21,7 +21,6 @@ function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMinimizedNavVisible, setIsMinimizedNavVisible] = useState(false);
   const [hasEnteredSite, setHasEnteredSite] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     // Update class on document
@@ -68,10 +67,6 @@ function App() {
           }} />
         ) : (
           <>
-            {currentPage === 'dashboard' && !isAuthenticated ? (
-              <AuthPage onAuthSuccess={() => setIsAuthenticated(true)} />
-            ) : (
-              <>
             <MinimizedNavbar
               darkMode={darkMode}
               toggleDarkMode={() => setDarkMode(prev => !prev)}
@@ -168,8 +163,6 @@ function App() {
         )}
         <BackToTop />
               </>
-            )}
-          </>
         )}
       </div>
     </CartProvider>

@@ -31,15 +31,13 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
             </p>
 
             <SignIn 
-              afterSignInUrl={window.location.origin}
-              afterSignUpUrl={window.location.origin}
+              redirectUrl={window.location.origin}
+              signUpUrl="/sign-up"
               appearance={{
                 elements: {
                   formButtonPrimary: 
                     "bg-purple-gradient hover:opacity-90 transition-opacity",
                   card: "bg-transparent shadow-none",
-                  headerTitle: "hidden",
-                  headerSubtitle: "hidden",
                   dividerLine: "bg-gray-200 dark:bg-dark-accent",
                   dividerText: "text-gray-500 dark:text-dark-muted",
                   socialButtonsBlockButton: 
@@ -52,6 +50,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
                     "text-purple-500 dark:text-purple-400 hover:underline",
                 }
               }}
+              signInUrl="/sign-in"
             />
           </div>
         </motion.div>

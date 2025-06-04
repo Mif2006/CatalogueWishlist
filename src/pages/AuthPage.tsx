@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Lock, Eye, EyeOff, Loader } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, Loader, Chrome } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
 interface AuthPageProps {
@@ -33,6 +33,20 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: window.location.origin
+        }
+      });
+      if (error) throw error;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
     }
   };
 
@@ -117,6 +131,25 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
                 )}
               </button>
             </form>
+
+            <div className="mt-6 relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-200 dark:border-dark-accent"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-white dark:bg-dark-card text-gray-500 dark:text-dark-muted">
+                  Or continue with
+                </span>
+              </div>
+            </div>
+
+            <button
+              onClick={handleGoogleSignIn}
+              className="mt-6 w-full py-3 px-4 bg-white dark:bg-dark-accent border border-gray-200 dark:border-dark-accent rounded-xl text-jewelry-dark dark:text-dark-text font-medium hover:bg-gray-50 dark:hover:bg-dark-accent/70 transition-colors flex items-center justify-center space-x-2"
+            >
+              <Chrome size={20} className="text-[#4285F4]" />
+              <span>Sign in with Google</span>
+            </button>
 
             <p className="mt-6 text-center text-gray-600 dark:text-dark-muted">
               {isLogin ? "Don't have an account?" : "Already have an account?"}{' '}

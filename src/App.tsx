@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Store, User, ShoppingBag, Heart } from 'lucide-react';
-import { ClerkProvider, SignedIn, SignedOut } from '@clerk/clerk-react';
 import Dashboard from './components/Dashboard';
-import AuthPage from './pages/AuthPage';
 import LandingPage from './pages/LandingPage';
 import CatalogPage from './pages/CatalogPage';
 import { CartProvider } from './context/CartContext';
@@ -46,7 +44,6 @@ function App() {
   }, []);
 
   return (
-    <ClerkProvider publishableKey={import.meta.env.VITE_CLERK_PUBLISHABLE_KEY}>
     <CartProvider>
       <div className="min-h-screen bg-jewelry-cream dark:bg-dark-bg overflow-x-hidden transition-colors duration-300">
         <Navbar
@@ -71,14 +68,7 @@ function App() {
         ) : (
           <>
             {currentPage === 'dashboard' ? (
-              <>
-                <SignedOut>
-                  <AuthPage onAuthSuccess={() => setIsAuthenticated(true)} />
-                </SignedOut>
-                <SignedIn>
-                  <Dashboard darkMode={darkMode} setDarkMode={setDarkMode} />
-                </SignedIn>
-              </>
+              <Dashboard darkMode={darkMode} setDarkMode={setDarkMode} />
             ) : (
               <>
             <MinimizedNavbar
@@ -182,7 +172,6 @@ function App() {
         )}
       </div>
     </CartProvider>
-    </ClerkProvider>
   );
 }
 

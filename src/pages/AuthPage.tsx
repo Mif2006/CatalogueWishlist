@@ -121,7 +121,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
                 className="w-full py-3 bg-purple-gradient rounded-xl text-white font-medium hover:opacity-90 transition-opacity flex items-center justify-center space-x-2 disabled:opacity-70"
               >
                 {loading ? (
-                  <Loader className="animate-spin" size={20} />
+                  <Loader className="animate-spin\" size={20} />
                 ) : (
                   <span>{isLogin ? 'Sign In' : 'Create Account'}</span>
                 )}

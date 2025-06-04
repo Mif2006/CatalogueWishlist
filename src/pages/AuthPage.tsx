@@ -39,16 +39,21 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
   const handleGoogleSignIn = async () => {
     setLoading(true);
     setError('');
+    const { origin } = window.location;
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: window.location.origin
+          redirectTo: `${origin}/auth/callback`,
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent'
+          }
         }
       });
       if (error) {
         if (error.message.includes('provider is not enabled')) {
-          throw new Error('Google sign-in is not configured. Please try email/password login.');
+          throw new Error('Please ensure Google authentication is enabled in your Supabase project settings.');
         }
         throw error;
       }

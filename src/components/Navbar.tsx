@@ -41,7 +41,7 @@ const Navbar: React.FC<NavbarProps> = ({
               }}
               className={`text-xl md:text-2xl font-serif ${currentPage === 'landing' ? 'text-white' : 'text-jewelry-dark dark:text-dark-text'}`}
             >
-              Zaavg
+              Zaavgggg
             </button>
           </motion.div>
           

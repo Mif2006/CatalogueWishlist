@@ -7,3 +7,5 @@
  import { userData, purchaseData, wishlistData } from '../data/mockData';
  import { supabase } from '../lib/supabase';
  import type { Profile } from '../types';
+
+export default type

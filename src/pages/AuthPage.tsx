@@ -10,7 +10,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
   return (
     <div className="min-h-screen bg-jewelry-cream dark:bg-dark-bg flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -31,9 +31,8 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
             </p>
 
             <SignIn 
-              routing="path"
-              path="/sign-in"
-              redirectUrl={window.location.origin}
+              afterSignInUrl={window.location.origin}
+              afterSignUpUrl={window.location.origin}
               appearance={{
                 elements: {
                   formButtonPrimary: 

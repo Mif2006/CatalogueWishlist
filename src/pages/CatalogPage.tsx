@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Catalog from '../components/Catalog';
 import { catalogData, categories } from '../data/mockData';
@@ -45,9 +46,9 @@ const CatalogPage: React.FC = () => {
             All
           </button>
           {categories.map(category => (
-            <button
+            <Link
               key={category.id}
-              onClick={() => setActiveCategory(category.id)}
+              to={`/catalog/${category.id}`}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                 activeCategory === category.id
                   ? 'bg-purple-gradient text-white'
@@ -55,7 +56,7 @@ const CatalogPage: React.FC = () => {
               }`}
             >
               {category.name}
-            </button>
+            </Link>
           ))}
         </div>
         <Catalog items={filteredItems} />

@@ -22,13 +22,13 @@ const Cart: React.FC = () => {
   return (
     <>
       <button 
-        className="relative p-2 text-gray-500 hover:text-purple-500 dark:text-dark-muted dark:hover:text-purple-light transition-colors"
+        className="relative p-2 rounded-full hover:bg-purple-50 dark:hover:bg-purple-900/20 text-gray-500 hover:text-purple-500 dark:text-dark-muted dark:hover:text-purple-light transition-colors"
         onClick={() => dispatch({ type: 'TOGGLE_CART' })}
         aria-label="Shopping Cart"
       >
         <ShoppingCart size={20} />
         {state.items.length > 0 && (
-          <span className="absolute -top-1 -right-1 w-5 h-5 bg-purple-500 text-white text-xs rounded-full flex items-center justify-center">
+          <span className="absolute -top-1 -right-1 w-5 h-5 bg-purple-gradient text-white text-xs font-medium rounded-full flex items-center justify-center shadow-lg">
             {state.items.length}
           </span>
         )}
@@ -48,10 +48,10 @@ const Cart: React.FC = () => {
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 20 }}
-              className="fixed right-0 top-0 h-full w-full max-w-md bg-white dark:bg-dark-card shadow-2xl z-50 flex flex-col"
+              transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+              className="fixed right-0 top-0 h-full w-full max-w-[400px] bg-white dark:bg-dark-card shadow-2xl z-50 flex flex-col"
             >
-              <div className="p-6 border-b border-gray-100 dark:border-dark-accent flex justify-between items-center">
+              <div className="px-6 h-16 border-b border-gray-100 dark:border-dark-accent flex justify-between items-center bg-white dark:bg-dark-card sticky top-0 z-10">
                 <div className="flex items-center space-x-3">
                   <ShoppingCart className="text-purple-500 dark:text-purple-400" size={24} />
                   <h2 className="text-xl font-serif text-jewelry-dark dark:text-dark-text">
@@ -67,7 +67,7 @@ const Cart: React.FC = () => {
                 </button>
               </div>
 
-              <div className="flex-1 overflow-y-auto p-6">
+              <div className="flex-1 overflow-y-auto px-4 py-6">
                 <div className="space-y-6">
                   {state.items.map(item => (
                     <motion.div
@@ -75,33 +75,33 @@ const Cart: React.FC = () => {
                       layout
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
-                      className="flex space-x-4 bg-gray-50 dark:bg-dark-accent/30 p-4 rounded-xl"
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      className="flex space-x-4 bg-gray-50 dark:bg-dark-accent/30 p-4 rounded-xl border border-gray-100 dark:border-dark-accent"
                     >
-                      <div className="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0 bg-white dark:bg-dark-card">
+                      <div className="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0 bg-white dark:bg-dark-card shadow-md">
                         <img
                           src={item.imageUrl}
                           alt={item.name}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
                         />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-serif text-jewelry-dark dark:text-dark-text mb-1 truncate">
+                        <h3 className="font-serif text-jewelry-dark dark:text-dark-text text-lg mb-1 truncate">
                           {item.name}
                         </h3>
-                        <p className="text-purple-500 dark:text-purple-400 font-medium mb-3">
+                        <p className="text-purple-500 dark:text-purple-400 font-medium text-lg mb-3">
                           ${(item.price * item.quantity).toLocaleString()}
                         </p>
                         <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-2 bg-white dark:bg-dark-card rounded-lg p-1">
+                          <div className="flex items-center space-x-1 bg-white dark:bg-dark-card rounded-lg shadow-sm">
                             <button
                               onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                              className="p-1 hover:bg-gray-100 dark:hover:bg-dark-accent rounded-md transition-colors"
+                              className="p-2 hover:bg-gray-100 dark:hover:bg-dark-accent rounded-lg transition-colors"
                               aria-label="Decrease quantity"
                             >
                               <Minus size={16} className="text-gray-500 dark:text-dark-muted" />
                             </button>
-                            <span className="w-8 text-center text-sm text-jewelry-dark dark:text-dark-text">
+                            <span className="w-8 text-center font-medium text-jewelry-dark dark:text-dark-text">
                               {item.quantity}
                             </span>
                             <button
@@ -114,7 +114,7 @@ const Cart: React.FC = () => {
                           </div>
                           <button
                             onClick={() => dispatch({ type: 'REMOVE_ITEM', payload: item.id })}
-                            className="p-2 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg text-red-500 transition-colors"
+                            className="p-2 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg text-red-500 hover:text-red-600 transition-colors"
                             aria-label="Remove item"
                           >
                             <Trash2 size={16} />
@@ -126,22 +126,22 @@ const Cart: React.FC = () => {
                   
                   {state.items.length === 0 && (
                     <div className="text-center py-12">
-                      <ShoppingCart size={48} className="mx-auto mb-4 text-gray-300 dark:text-dark-accent" />
-                      <p className="text-gray-500 dark:text-dark-muted">Your cart is empty</p>
+                      <ShoppingCart size={64} className="mx-auto mb-4 text-gray-300 dark:text-dark-accent" />
+                      <p className="text-gray-500 dark:text-dark-muted text-lg">Your cart is empty</p>
                     </div>
                   )}
                 </div>
               </div>
 
               {state.items.length > 0 && (
-                <div className="p-6 border-t border-gray-100 dark:border-dark-accent bg-white dark:bg-dark-card">
+                <div className="p-6 border-t border-gray-100 dark:border-dark-accent bg-white dark:bg-dark-card sticky bottom-0">
                   <div className="flex justify-between items-center mb-6">
-                    <span className="text-jewelry-dark dark:text-dark-text">Total</span>
+                    <span className="text-jewelry-dark dark:text-dark-text text-lg">Total</span>
                     <span className="text-2xl font-serif text-purple-500 dark:text-purple-400">
                       ${totalPrice.toLocaleString()}
                     </span>
                   </div>
-                  <button className="w-full py-3 bg-purple-gradient rounded-xl text-white font-medium hover:opacity-90 transition-opacity">
+                  <button className="w-full py-4 bg-purple-gradient rounded-xl text-white font-medium text-lg hover:opacity-90 transition-opacity shadow-lg hover:shadow-xl">
                     Proceed to Checkout
                   </button>
                 </div>

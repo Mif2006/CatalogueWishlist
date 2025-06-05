@@ -47,3 +47,5 @@ const Layout: React.FC<LayoutProps> = ({ darkMode, setDarkMode }) => {
     </div>
   );
 }
+
+export default Layout

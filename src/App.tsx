@@ -42,11 +42,11 @@ function App() {
                   />
                 } 
               />
-              <Route path="*" element={<Navigate to="/" replace />} />
+              <Route path="*" element={<Navigate to="/\" replace />} />
             </>
           ) : (
             <Route element={<Layout darkMode={darkMode} setDarkMode={setDarkMode} />}>
-              <Route path="/" element={<Navigate to="/catalog" replace />} />
+              <Route path="/" element={<Navigate to="/catalog\" replace />} />
               <Route path="/dashboard" element={<Dashboard darkMode={darkMode} setDarkMode={setDarkMode} />} />
               <Route path="/catalog" element={<CatalogPage />} />
               <Route path="/catalog/:category" element={<CategoryPage />} />

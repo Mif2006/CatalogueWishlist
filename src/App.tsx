@@ -68,7 +68,7 @@ function App() {
               } />
               <Route path="/catalog" element={<CatalogPage />} />
               <Route path="/catalog/:category" element={<CategoryPage />} />
-              <Route path="*" element={<Navigate to="/dashboard" replace />} />
+              <Route path="*" element={<Navigate to="/dashboard\" replace />} />
             </Routes>
           </Layout>
           </>

@@ -1,8 +1,8 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Catalog from '../components/Catalog';
-import { catalogData } from '../data/mockData';
+import { catalogData, categories } from '../data/mockData';
 
 const CategoryPage: React.FC = () => {
   const { category } = useParams();
@@ -35,6 +35,12 @@ const CategoryPage: React.FC = () => {
         <p className="text-gray-600 dark:text-dark-muted max-w-2xl mx-auto">
           Discover our carefully curated selection of {category} pieces, each crafted with exceptional attention to detail.
         </p>
+        <Link 
+          to="/catalog"
+          className="inline-block mt-4 text-purple-500 dark:text-purple-400 hover:underline"
+        >
+          ← Back to All Categories
+        </Link>
       </motion.div>
 
       <motion.div

@@ -73,7 +73,7 @@ const Layout: React.FC<LayoutProps> = ({ children, darkMode, setDarkMode }) => {
               <nav className="p-4 space-y-2">
                 <button
                   onClick={() => {
-                    window.location.href = '/dashboard';
+                    navigate('/dashboard');
                     setIsMobileMenuOpen(false);
                   }}
                   className={`w-full flex items-center space-x-2 px-4 py-3 rounded-lg transition-colors ${
@@ -87,7 +87,7 @@ const Layout: React.FC<LayoutProps> = ({ children, darkMode, setDarkMode }) => {
                 </button>
                 <button
                   onClick={() => {
-                    window.location.href = '/catalog';
+                    navigate('/catalog');
                     setIsMobileMenuOpen(false);
                   }}
                   className={`w-full flex items-center space-x-2 px-4 py-3 rounded-lg transition-colors ${

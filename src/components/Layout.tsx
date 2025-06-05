@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { X, Store, User, ShoppingBag, Heart } from 'lucide-react';
 import Navbar from './Navbar';
 import MinimizedNavbar from './MinimizedNavbar';
@@ -16,6 +16,7 @@ const Layout: React.FC<LayoutProps> = ({ children, darkMode, setDarkMode }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMinimizedNavVisible, setIsMinimizedNavVisible] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const currentPage = location.pathname.startsWith('/catalog') ? 'catalog' : 'dashboard';
 
   useEffect(() => {

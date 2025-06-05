@@ -1,13 +1,13 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Sun, Moon, Menu } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import { Sun, Moon, Menu, ShoppingCart } from 'lucide-react';
 import Cart from './Cart';
 
 interface NavbarProps {
   darkMode: boolean;
   setDarkMode: (value: boolean) => void;
   currentPage: 'landing' | 'dashboard' | 'catalog';
+  setCurrentPage: (page: 'dashboard' | 'catalog') => void;
   setIsMobileMenuOpen: (isOpen: boolean) => void;
   hasEnteredSite: boolean;
 }
@@ -16,11 +16,10 @@ const Navbar: React.FC<NavbarProps> = ({
   darkMode,
   setDarkMode,
   currentPage,
+  setCurrentPage,
   setIsMobileMenuOpen,
   hasEnteredSite
 }) => {
-  const location = useLocation();
-
   return (
     <header className={`bg-white/80 dark:bg-dark-card/80 backdrop-blur-lg shadow-elegant dark:shadow-dark-elegant sticky top-0 z-30 transition-colors duration-300 ${currentPage === 'landing' ? 'bg-transparent dark:bg-transparent shadow-none' : ''}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
@@ -48,26 +47,26 @@ const Navbar: React.FC<NavbarProps> = ({
           
           {hasEnteredSite && (
             <nav className="hidden md:flex items-center space-x-6">
-              <Link
-                to="/dashboard"
+              <button
+                onClick={() => setCurrentPage('dashboard')}
                 className={`text-sm font-medium transition-colors ${
-                  location.pathname === '/dashboard'
+                  currentPage === 'dashboard'
                     ? 'text-purple-500 dark:text-purple-400'
                     : 'text-gray-600 dark:text-dark-muted hover:text-purple-500 dark:hover:text-purple-400'
                 }`}
               >
                 Dashboard
-              </Link>
-              <Link
-                to="/catalog"
+              </button>
+              <button
+                onClick={() => setCurrentPage('catalog')}
                 className={`text-sm font-medium transition-colors ${
-                  location.pathname.startsWith('/catalog')
+                  currentPage === 'catalog'
                     ? 'text-purple-500 dark:text-purple-400'
                     : 'text-gray-600 dark:text-dark-muted hover:text-purple-500 dark:hover:text-purple-400'
                 }`}
               >
                 Catalog
-              </Link>
+              </button>
             </nav>
           )}
         </div>

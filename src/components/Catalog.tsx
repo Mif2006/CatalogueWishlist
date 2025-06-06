@@ -32,7 +32,7 @@ const Catalog: React.FC<CatalogProps> = ({ items, onItemClick }) => {
           className="bg-white dark:bg-dark-card rounded-2xl shadow-elegant dark:shadow-dark-elegant overflow-hidden group cursor-pointer"
           onClick={() => onItemClick(item)}
         >
-          <div className="relative aspect-square overflow-hidden" onClick={(e) => e.stopPropagation()}>
+          <div className="relative aspect-square overflow-hidden cursor-pointer" onClick={() => onItemClick(item)}>
             {item.isNew && (
               <div className="absolute top-2 left-2 z-10 px-2 py-1 bg-purple-gradient rounded-full">
                 <span className="text-xs text-white font-medium">New</span>

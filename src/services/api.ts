@@ -36,19 +36,47 @@ export const parseSizes = (sizesString: string): Record<string, number> => {
     // Remove any extra whitespace
     const cleanString = sizesString.trim();
     
-    // Fix unquoted keys by adding quotes around numeric keys
-    // This regex matches unquoted numeric keys (including decimals) and wraps them in quotes
-    const fixedString = cleanString.replace(/(\{|,\s*)([0-9]+\.?[0-9]*)\s*:/g, '$1"$2":');
-    
-    const parsed = JSON.parse(fixedString);
-    
-    // Convert all values to numbers and ensure proper format
-    const result: Record<string, number> = {};
-    for (const [size, quantity] of Object.entries(parsed)) {
-      result[size] = Number(quantity);
+    // Return empty object if string is empty
+    if (!cleanString) {
+      return {};
     }
     
-    return result;
+    // Check if the string is already a valid JSON object (starts and ends with curly braces)
+    if (cleanString.startsWith('{') && cleanString.endsWith('}')) {
+      // Fix unquoted keys by adding quotes around numeric keys
+      const fixedString = cleanString.replace(/(\{|,\s*)([0-9]+\.?[0-9]*)\s*:/g, '$1"$2":');
+      
+      const parsed = JSON.parse(fixedString);
+      
+      // Convert all values to numbers and ensure proper format
+      const result: Record<string, number> = {};
+      for (const [size, quantity] of Object.entries(parsed)) {
+        result[size] = Number(quantity);
+      }
+      
+      return result;
+    } else {
+      // Handle comma-separated key-value pairs (e.g., "1:10, 2:5" or "Small:5, Large:10")
+      const result: Record<string, number> = {};
+      
+      // Split by comma and process each pair
+      const pairs = cleanString.split(',');
+      
+      for (const pair of pairs) {
+        const trimmedPair = pair.trim();
+        if (trimmedPair) {
+          // Split by colon to get key and value
+          const [key, value] = trimmedPair.split(':');
+          if (key && value) {
+            const trimmedKey = key.trim();
+            const trimmedValue = value.trim();
+            result[trimmedKey] = Number(trimmedValue) || 0;
+          }
+        }
+      }
+      
+      return result;
+    }
   } catch (error) {
     console.error('Error parsing sizes:', error);
     return {};

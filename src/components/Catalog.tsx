@@ -82,40 +82,30 @@ const Catalog: React.FC<CatalogProps> = ({ items, onItemClick }) => {
               </p>
             </div>
             
-            {Object.keys(item.sizes).length > 0 && (
-              <div className="mb-3">
-                <p className="text-xs text-gray-500 dark:text-dark-muted mb-1">Available sizes:</p>
-                <div className="flex flex-wrap gap-1">
-                  {Object.entries(item.sizes).map(([size, quantity]) => (
-                    <span 
-                      key={size}
-                      className={`text-xs px-2 py-1 rounded ${
-                        quantity > 0 
-                          ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300' 
-                          : 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
-                      }`}
-                    >
-                      {size} ({quantity})
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-            
             <p className="text-xs text-gray-600 dark:text-dark-muted mb-4 line-clamp-2">{item.description}</p>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={(e) => {
-                e.stopPropagation();
-                dispatch({ type: 'ADD_ITEM', payload: { ...item, quantity: 1 } });
-              }}
-              disabled={Object.keys(item.sizes).length > 0 && Object.values(item.sizes).every(qty => qty === 0)}
-              className="w-full px-3 py-2 bg-purple-gradient rounded-lg text-white font-medium text-xs hover:opacity-90 transition-opacity flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <ShoppingCart size={14} />
-              <span>{Object.keys(item.sizes).length > 0 && Object.values(item.sizes).every(qty => qty === 0) ? 'Out of Stock' : 'Add to Cart'}</span>
-            </motion.button>
+            <div className="flex space-x-2">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => onItemClick(item)}
+                className="flex-1 px-3 py-2 bg-white dark:bg-dark-accent border border-purple-500 dark:border-purple-400 rounded-lg text-purple-500 dark:text-purple-400 font-medium text-xs hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors flex items-center justify-center space-x-1"
+              >
+                <span>Learn More</span>
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  dispatch({ type: 'ADD_ITEM', payload: { ...item, quantity: 1 } });
+                }}
+                disabled={Object.keys(item.sizes).length > 0 && Object.values(item.sizes).every(qty => qty === 0)}
+                className="flex-1 px-3 py-2 bg-purple-gradient rounded-lg text-white font-medium text-xs hover:opacity-90 transition-opacity flex items-center justify-center space-x-1 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <ShoppingCart size={14} />
+                <span>{Object.keys(item.sizes).length > 0 && Object.values(item.sizes).every(qty => qty === 0) ? 'Out of Stock' : 'Add to Cart'}</span>
+              </motion.button>
+            </div>
           </div>
         </motion.div>
       ))}

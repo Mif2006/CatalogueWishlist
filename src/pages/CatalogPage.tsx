@@ -257,25 +257,45 @@ const CatalogPage: React.FC = () => {
         <div className="flex flex-wrap gap-2 mb-6">
           <button
             onClick={() => setActiveCategory('all')}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+            className={`group relative px-4 py-2 rounded-lg text-sm font-medium overflow-hidden cursor-pointer ${
               activeCategory === 'all' && !activeCollection
                 ? 'bg-purple-gradient text-white'
-                : 'bg-gray-100 dark:bg-dark-accent text-gray-600 dark:text-dark-muted hover:bg-gray-200 dark:hover:bg-dark-accent/70'
+                : 'bg-gray-200 dark:bg-dark-accent text-black dark:text-dark-text'
             }`}
           >
-            All
+            {activeCategory !== 'all' || activeCollection ? (
+              <>
+                <div className="absolute -right-10 origin-center top-1/2 -translate-y-1/2 w-[120%] h-[120%] group-hover:w-10 group-hover:h-10 group-hover:right-2 rounded-full bg-white dark:bg-dark-text transition-all duration-500"></div>
+                <span className="relative z-10 uppercase transition-all duration-500 group-hover:text-white dark:group-hover:text-black group-hover:-translate-x-2">All</span>
+                <div className="group-hover:bg-white dark:group-hover:bg-dark-text w-6 h-6 rounded-full absolute right-2 top-1/2 -translate-y-1/2 flex justify-center items-center overflow-hidden opacity-0 group-hover:opacity-100 transition-all duration-500">
+                  <div className="w-3 h-3 border-r-2 border-b-2 border-gray-600 dark:border-gray-300 rotate-45 translate-y-0 group-hover:-translate-y-0.5 transition-all duration-500"></div>
+                </div>
+              </>
+            ) : (
+              <span className="relative z-10">All</span>
+            )}
           </button>
           {categories.map(category => (
             <button
               key={category.id}
               onClick={() => setActiveCategory(category.id)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+              className={`group relative px-4 py-2 rounded-lg text-sm font-medium overflow-hidden cursor-pointer ${
                 activeCategory === category.id
                   ? 'bg-purple-gradient text-white'
-                  : 'bg-gray-100 dark:bg-dark-accent text-gray-600 dark:text-dark-muted hover:bg-gray-200 dark:hover:bg-dark-accent/70'
+                  : 'bg-gray-200 dark:bg-dark-accent text-black dark:text-dark-text'
               }`}
             >
-              {category.name}
+              {activeCategory !== category.id ? (
+                <>
+                  <div className="absolute -right-10 origin-center top-1/2 -translate-y-1/2 w-[120%] h-[120%] group-hover:w-10 group-hover:h-10 group-hover:right-2 rounded-full bg-white dark:bg-dark-text transition-all duration-500"></div>
+                  <span className="relative z-10 uppercase transition-all duration-500 group-hover:text-white dark:group-hover:text-black group-hover:-translate-x-2">{category.name}</span>
+                  <div className="group-hover:bg-white dark:group-hover:bg-dark-text w-6 h-6 rounded-full absolute right-2 top-1/2 -translate-y-1/2 flex justify-center items-center overflow-hidden opacity-0 group-hover:opacity-100 transition-all duration-500">
+                    <div className="w-3 h-3 border-r-2 border-b-2 border-gray-600 dark:border-gray-300 rotate-45 translate-y-0 group-hover:-translate-y-0.5 transition-all duration-500"></div>
+                  </div>
+                </>
+              ) : (
+                <span className="relative z-10">{category.name}</span>
+              )}
             </button>
           ))}
         </div>
@@ -288,13 +308,23 @@ const CatalogPage: React.FC = () => {
                 <button 
                   key={collection} 
                   onClick={() => handleCollectionClick(collection)}
-                  className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+                  className={`group relative px-3 py-1 rounded-lg text-xs font-medium overflow-hidden cursor-pointer ${
                     activeCollection === collection
                       ? 'bg-blue-500 text-white'
-                      : 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 hover:bg-purple-200 dark:hover:bg-purple-800/50'
+                      : 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300'
                   }`}
                 >
-                  {collection}
+                  {activeCollection !== collection ? (
+                    <>
+                      <div className="absolute -right-8 origin-center top-1/2 -translate-y-1/2 w-[120%] h-[120%] group-hover:w-8 group-hover:h-8 group-hover:right-1 rounded-full bg-white dark:bg-dark-text transition-all duration-500"></div>
+                      <span className="relative z-10 uppercase transition-all duration-500 group-hover:text-purple-700 dark:group-hover:text-purple-300 group-hover:-translate-x-1">{collection}</span>
+                      <div className="group-hover:bg-white dark:group-hover:bg-dark-text w-5 h-5 rounded-full absolute right-1 top-1/2 -translate-y-1/2 flex justify-center items-center overflow-hidden opacity-0 group-hover:opacity-100 transition-all duration-500">
+                        <div className="w-2 h-2 border-r-2 border-b-2 border-purple-700 dark:border-purple-300 rotate-45 translate-y-0 group-hover:-translate-y-0.5 transition-all duration-500"></div>
+                      </div>
+                    </>
+                  ) : (
+                    <span className="relative z-10">{collection}</span>
+                  )}
                 </button>
               ))}
             </div>

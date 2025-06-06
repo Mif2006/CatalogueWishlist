@@ -29,7 +29,7 @@ const Catalog: React.FC<CatalogProps> = ({ items, onItemClick }) => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: index * 0.1 }}
-          className="bg-white dark:bg-dark-card rounded-2xl shadow-lg hover:shadow-2xl dark:shadow-dark-elegant border border-gray-100 dark:border-dark-accent overflow-hidden group cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:border-purple-200 dark:hover:border-purple-500"
+          className="bg-white dark:bg-dark-card rounded-2xl shadow-lg hover:shadow-2xl dark:shadow-dark-elegant border border-gray-100 dark:border-dark-accent overflow-hidden group cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:border-purple-200 dark:hover:border-purple-0"
           onClick={() => onItemClick(item)}
         >
           <div className="relative aspect-square overflow-hidden cursor-pointer" onClick={() => onItemClick(item)}>

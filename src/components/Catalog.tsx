@@ -88,9 +88,27 @@ const Catalog: React.FC<CatalogProps> = ({ items, onItemClick }) => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => onItemClick(item)}
-                className="flex-1 px-3 py-2 bg-white dark:bg-dark-accent border border-purple-500 dark:border-purple-400 rounded-lg text-purple-500 dark:text-purple-400 font-medium text-xs hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors flex items-center justify-center space-x-1"
+                className="group flex-1 px-3 py-2 bg-gray-100 dark:bg-dark-accent rounded-lg relative cursor-pointer overflow-hidden transition-all duration-300 hover:shadow-lg"
               >
-                <span>Learn More</span>
+                {/* Sliding background circle */}
+                <div className="absolute -right-8 top-1/2 -translate-y-1/2 w-[120%] h-[120%] group-hover:w-8 group-hover:h-8 group-hover:right-2 rounded-full bg-purple-500 dark:bg-purple-400 transition-all duration-500 ease-out" />
+                
+                {/* Text */}
+                <span className="relative z-10 text-xs font-medium text-gray-700 dark:text-dark-text transition-all duration-500 group-hover:text-white group-hover:-translate-x-2">
+                  LEARN MORE
+                </span>
+                
+                {/* Arrow */}
+                <div className="absolute right-2 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-purple-500 dark:bg-purple-400 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 z-10">
+                  <svg 
+                    className="w-3 h-3 text-white transform translate-y-8 group-hover:translate-y-0 transition-transform duration-500" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
               </motion.button>
               <motion.button
                 whileHover={{ scale: 1.05 }}

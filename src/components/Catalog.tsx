@@ -6,9 +6,10 @@ import type { CatalogItem } from '../hooks/useCatalogData';
 
 interface CatalogProps {
   items: CatalogItem[];
+  onItemClick: (item: CatalogItem) => void;
 }
 
-const Catalog: React.FC<CatalogProps> = ({ items }) => {
+const Catalog: React.FC<CatalogProps> = ({ items, onItemClick }) => {
   const { dispatch, wishlist, toggleWishlist } = useCart();
   
   if (items.length === 0) {
@@ -28,9 +29,10 @@ const Catalog: React.FC<CatalogProps> = ({ items }) => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: index * 0.1 }}
-          className="bg-white dark:bg-dark-card rounded-2xl shadow-elegant dark:shadow-dark-elegant overflow-hidden group"
+          className="bg-white dark:bg-dark-card rounded-2xl shadow-elegant dark:shadow-dark-elegant overflow-hidden group cursor-pointer"
+          onClick={() => onItemClick(item)}
         >
-          <div className="relative aspect-square overflow-hidden">
+          <div className="relative aspect-square overflow-hidden" onClick={(e) => e.stopPropagation()}>
             {item.isNew && (
               <div className="absolute top-2 left-2 z-10 px-2 py-1 bg-purple-gradient rounded-full">
                 <span className="text-xs text-white font-medium">New</span>
@@ -56,7 +58,10 @@ const Catalog: React.FC<CatalogProps> = ({ items }) => {
                 <Share2 size={18} />
               </button>
               <button 
-                onClick={() => toggleWishlist(item)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleWishlist(item);
+                }}
                 className="p-2 bg-white/90 dark:bg-dark-card/90 rounded-full transition-colors"
               >
                 <Heart 
@@ -101,7 +106,10 @@ const Catalog: React.FC<CatalogProps> = ({ items }) => {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => dispatch({ type: 'ADD_ITEM', payload: { ...item, quantity: 1 } })}
+              onClick={(e) => {
+                e.stopPropagation();
+                dispatch({ type: 'ADD_ITEM', payload: { ...item, quantity: 1 } });
+              }}
               disabled={Object.keys(item.sizes).length > 0 && Object.values(item.sizes).every(qty => qty === 0)}
               className="w-full px-3 py-2 bg-purple-gradient rounded-lg text-white font-medium text-xs hover:opacity-90 transition-opacity flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >

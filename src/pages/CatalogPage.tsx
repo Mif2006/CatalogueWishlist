@@ -2,7 +2,9 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { RefreshCw, AlertCircle } from 'lucide-react';
 import Catalog from '../components/Catalog';
+import ProductDetailPage from './ProductDetailPage';
 import { useCatalogData } from '../hooks/useCatalogData';
+import type { CatalogItem } from '../hooks/useCatalogData';
 
 const categories = [
   { id: 'new', name: 'New Arrivals' },
@@ -17,6 +19,7 @@ const categories = [
 
 const CatalogPage: React.FC = () => {
   const [activeCategory, setActiveCategory] = React.useState('all');
+  const [selectedProduct, setSelectedProduct] = React.useState<CatalogItem | null>(null);
   const { items, loading, error, refetch } = useCatalogData();
 
   const filteredItems = React.useMemo(() => {
@@ -30,6 +33,24 @@ const CatalogPage: React.FC = () => {
     const uniqueCollections = [...new Set(items.filter(item => item.collection).map(item => item.collection))];
     return uniqueCollections.filter(Boolean) as string[];
   }, [items]);
+
+  const handleItemClick = (item: CatalogItem) => {
+    setSelectedProduct(item);
+  };
+
+  const handleBackToCatalog = () => {
+    setSelectedProduct(null);
+  };
+
+  // If a product is selected, show the product detail page
+  if (selectedProduct) {
+    return (
+      <ProductDetailPage 
+        product={selectedProduct} 
+        onBack={handleBackToCatalog}
+      />
+    );
+  }
 
   if (loading) {
     return (
@@ -142,7 +163,7 @@ const CatalogPage: React.FC = () => {
         )}
         
         <AnimatePresence mode="wait">
-          <Catalog key={activeCategory} items={filteredItems} />
+          <Catalog key={activeCategory} items={filteredItems} onItemClick={handleItemClick} />
         </AnimatePresence>
       </motion.div>
     </div>

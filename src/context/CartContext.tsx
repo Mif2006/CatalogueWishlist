@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import type { Purchase, WishlistItem } from '../types';
 
-type CartItem = (Purchase | WishlistItem) & { quantity: number };
+type CartItem = (Purchase | WishlistItem) & { quantity: number; selectedSize?: string };
 
 interface CartState {
   items: CartItem[];

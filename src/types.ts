@@ -22,4 +22,8 @@ export interface WishlistItem {
   description: string;
   imageUrl: string;
   category: string;
+  sizes?: Record<string, number>;
+  isNew?: boolean;
+  collection?: string | null;
+  backImages?: string[];
 }

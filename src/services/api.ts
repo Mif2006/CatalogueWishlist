@@ -15,7 +15,7 @@ export interface ApiResponse {
 
 export const fetchCatalogData = async (): Promise<ProductData[]> => {
   try {
-    const response = await fetch('https://script.google.com/macros/s/AKfycbwNxPpzRaHAPDqBr3StWWE0iki-yy03LfkuWFP7hBM1chMYFKYPwdfHWSeB8yBZ1Xk9Og/exec');
+    const response = await fetch('https://script.googleusercontent.com/macros/echo?user_content_key=AehSKLhtp8wjjL5cqlRUQMhu49VvZdaWrypmAvv2bSlv0n_AzYxx0hPN1eN_zENPvtlGfqO2j9o_yWTU5owMMKBAYUCmaK_0Ykx9daTKLPRtiYNJJnZOE5UCPZC4swKlYBZfhWXV_5Sm4jnXMvTOyULZyWMtMbaQ7OqW4h-2pd16YhHf_mmmejbXO0xicLFaBwoh2UIjPmxDee26BPbZHyFvxIJrwQF0bkcfnu1NJlqT09970KntPatF2nKywJU-A5sJUvq-L-zymQiqi4WXR7yZylcufBIc0Sq0yvbGB70C&lib=Mw2XXmvRGu-in3pnh3uSbnmONnX9Sat_b');
     
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);

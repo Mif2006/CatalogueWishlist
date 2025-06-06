@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { RefreshCw, AlertCircle, Search, X, ArrowRight } from 'lucide-react';
+import { RefreshCw, AlertCircle, Search, X } from 'lucide-react';
 import Catalog from '../components/Catalog';
 import ProductDetailPage from './ProductDetailPage';
 import { useCatalogData } from '../hooks/useCatalogData';
@@ -257,77 +257,25 @@ const CatalogPage: React.FC = () => {
         <div className="flex flex-wrap gap-2 mb-6">
           <button
             onClick={() => setActiveCategory('all')}
-            className={`cta-button group ${
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
               activeCategory === 'all' && !activeCollection
-                ? 'active'
-                : ''
-            } ${
-              activeCategory === 'all' && !activeCollection
-                ? 'bg-purple-600 dark:bg-purple-500'
-                : 'bg-gray-100 dark:bg-dark-accent'
+                ? 'bg-purple-gradient text-white'
+                : 'bg-gray-100 dark:bg-dark-accent text-gray-600 dark:text-dark-muted hover:bg-gray-200 dark:hover:bg-dark-accent/70'
             }`}
           >
-            <div className={`bg-circle ${
-              activeCategory === 'all' && !activeCollection
-                ? 'bg-white dark:bg-dark-text'
-                : 'bg-purple-600 dark:bg-purple-400'
-            }`} />
-            <span className={`text ${
-              activeCategory === 'all' && !activeCollection
-                ? 'text-white dark:text-dark-bg'
-                : 'text-gray-600 dark:text-dark-muted group-hover:text-white'
-            }`}>
-              All
-            </span>
-            <div className={`arrow-wrapper ${
-              activeCategory === 'all' && !activeCollection
-                ? 'bg-purple-600 dark:bg-purple-500'
-                : 'bg-white dark:bg-dark-text'
-            }`}>
-              <ArrowRight className={
-                activeCategory === 'all' && !activeCollection
-                  ? 'text-white dark:text-dark-bg'
-                  : 'text-purple-600 dark:text-purple-400'
-              } />
-            </div>
+            All
           </button>
           {categories.map(category => (
             <button
               key={category.id}
               onClick={() => setActiveCategory(category.id)}
-              className={`cta-button group ${
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                 activeCategory === category.id
-                  ? 'active'
-                  : ''
-              } ${
-                activeCategory === category.id
-                  ? 'bg-purple-600 dark:bg-purple-500'
-                  : 'bg-gray-100 dark:bg-dark-accent'
+                  ? 'bg-purple-gradient text-white'
+                  : 'bg-gray-100 dark:bg-dark-accent text-gray-600 dark:text-dark-muted hover:bg-gray-200 dark:hover:bg-dark-accent/70'
               }`}
             >
-              <div className={`bg-circle ${
-                activeCategory === category.id
-                  ? 'bg-white dark:bg-dark-text'
-                  : 'bg-purple-600 dark:bg-purple-400'
-              }`} />
-              <span className={`text ${
-                activeCategory === category.id
-                  ? 'text-white dark:text-dark-bg'
-                  : 'text-gray-600 dark:text-dark-muted group-hover:text-white'
-              }`}>
-                {category.name}
-              </span>
-              <div className={`arrow-wrapper ${
-                activeCategory === category.id
-                  ? 'bg-purple-600 dark:bg-purple-500'
-                  : 'bg-white dark:bg-dark-text'
-              }`}>
-                <ArrowRight className={
-                  activeCategory === category.id
-                    ? 'text-white dark:text-dark-bg'
-                    : 'text-purple-600 dark:text-purple-400'
-                } />
-              </div>
+              {category.name}
             </button>
           ))}
         </div>

@@ -102,11 +102,11 @@ const Catalog: React.FC<CatalogProps> = ({ items }) => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => dispatch({ type: 'ADD_ITEM', payload: { ...item, quantity: 1 } })}
-              disabled={Object.values(item.sizes).every(qty => qty === 0)}
+              disabled={Object.keys(item.sizes).length > 0 && Object.values(item.sizes).every(qty => qty === 0)}
               className="w-full px-3 py-2 bg-purple-gradient rounded-lg text-white font-medium text-xs hover:opacity-90 transition-opacity flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <ShoppingCart size={14} />
-              <span>{Object.values(item.sizes).every(qty => qty === 0) ? 'Out of Stock' : 'Add to Cart'}</span>
+              <span>{Object.keys(item.sizes).length > 0 && Object.values(item.sizes).every(qty => qty === 0) ? 'Out of Stock' : 'Add to Cart'}</span>
             </motion.button>
           </div>
         </motion.div>

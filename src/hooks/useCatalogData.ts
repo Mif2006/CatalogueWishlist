@@ -8,7 +8,7 @@ export interface CatalogItem {
   description: string;
   imageUrl: string;
   category: string;
-  sizes: Record<string, number>;
+  sizes: Record<string, number>; // size -> quantity available
   isNew: boolean;
   collection: string | null;
   backImages: string[];

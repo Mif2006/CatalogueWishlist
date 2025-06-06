@@ -33,9 +33,18 @@ export const fetchCatalogData = async (): Promise<ProductData[]> => {
 
 export const parseSizes = (sizesString: string): Record<string, number> => {
   try {
-    // Remove any extra whitespace and parse the JSON-like string
+    // Remove any extra whitespace and parse the JSON object
+    // Expected format: "{14: 2, 14.5: 3, 15: 1, 15.5: 4, 16: 2, 16.5: 3, 17: 1, 17.5: 2, 18: 3, 18.5: 1, 19: 2, 19.5: 1, 20: 1, 21: 1}"
     const cleanString = sizesString.trim();
-    return JSON.parse(cleanString);
+    const parsed = JSON.parse(cleanString);
+    
+    // Convert all values to numbers and ensure proper format
+    const result: Record<string, number> = {};
+    for (const [size, quantity] of Object.entries(parsed)) {
+      result[size] = Number(quantity);
+    }
+    
+    return result;
   } catch (error) {
     console.error('Error parsing sizes:', error);
     return {};

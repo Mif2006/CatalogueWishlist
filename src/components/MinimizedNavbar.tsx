@@ -42,7 +42,7 @@ const MinimizedNavbar: React.FC<MinimizedNavbarProps> = ({
                   <span className="text-white font-serif text-sm">L</span>
                 </div>
                 <h1 className="text-lg font-serif text-jewelry-dark dark:text-dark-text">
-                  Lumina <span className="text-purple-500">Jewelry</span>
+                  Lumina <span className="text-purple-500"></span>
                 </h1>
               </motion.div>
             </div>

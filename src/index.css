@@ -87,7 +87,7 @@ body {
 
 /* CTA Button Effect for Category Filters */
 .cta-button {
-  @apply px-6 py-3 rounded-full relative cursor-pointer overflow-hidden transition-all duration-300 group;
+  @apply px-6 py-3 rounded-full relative cursor-pointer overflow-hidden transition-all duration-300;
 }
 
 .cta-button .bg-circle {

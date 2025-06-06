@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { RefreshCw, AlertCircle } from 'lucide-react';
+import { RefreshCw, AlertCircle, Search, X } from 'lucide-react';
 import Catalog from '../components/Catalog';
 import ProductDetailPage from './ProductDetailPage';
 import { useCatalogData } from '../hooks/useCatalogData';
@@ -20,6 +20,7 @@ const categories = [
 const CatalogPage: React.FC = () => {
   const [activeCategory, setActiveCategory] = React.useState('all');
   const [activeCollection, setActiveCollection] = React.useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = React.useState('');
   const [selectedProduct, setSelectedProduct] = React.useState<CatalogItem | null>(null);
   const { items, loading, error, refetch } = useCatalogData();
 
@@ -42,8 +43,19 @@ const CatalogPage: React.FC = () => {
       filtered = filtered.filter(item => item.collection === activeCollection);
     }
     
+    // Filter by search query
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim();
+      filtered = filtered.filter(item => 
+        item.name.toLowerCase().includes(query) ||
+        item.description.toLowerCase().includes(query) ||
+        item.category.toLowerCase().includes(query) ||
+        (item.collection && item.collection.toLowerCase().includes(query))
+      );
+    }
+    
     return filtered;
-  }, [items, activeCategory, activeCollection]);
+  }, [items, activeCategory, activeCollection, searchQuery]);
 
   const collections = React.useMemo(() => {
     const uniqueCollections = [...new Set(items.filter(item => item.collection).map(item => item.collection))];
@@ -70,6 +82,11 @@ const CatalogPage: React.FC = () => {
   const clearFilters = () => {
     setActiveCategory('all');
     setActiveCollection(null);
+    setSearchQuery('');
+  };
+
+  const clearSearch = () => {
+    setSearchQuery('');
   };
 
   // If a product is selected, show the product detail page
@@ -138,17 +155,26 @@ const CatalogPage: React.FC = () => {
         className="bg-white dark:bg-dark-card shadow-elegant dark:shadow-dark-elegant rounded-2xl p-4 md:p-6 mb-8"
       >
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-serif text-jewelry-dark dark:text-dark-text">
-            {activeCollection 
-              ? `${activeCollection} Collection`
-              : activeCategory === 'all' 
-                ? 'All Items' 
-                : categories.find(c => c.id === activeCategory)?.name || 'Items'
-            }
-            <span className="text-sm text-gray-500 dark:text-dark-muted ml-2">
-              ({filteredItems.length} items)
-            </span>
-          </h2>
+          <div className="flex-1">
+            <h2 className="text-xl font-serif text-jewelry-dark dark:text-dark-text">
+              {searchQuery 
+                ? `Search Results`
+                : activeCollection 
+                  ? `${activeCollection} Collection`
+                  : activeCategory === 'all' 
+                    ? 'All Items' 
+                    : categories.find(c => c.id === activeCategory)?.name || 'Items'
+              }
+              <span className="text-sm text-gray-500 dark:text-dark-muted ml-2">
+                ({filteredItems.length} items)
+              </span>
+            </h2>
+            {searchQuery && (
+              <p className="text-sm text-gray-500 dark:text-dark-muted mt-1">
+                Searching for "{searchQuery}"
+              </p>
+            )}
+          </div>
           <button
             onClick={refetch}
             className="p-2 hover:bg-gray-100 dark:hover:bg-dark-accent rounded-full transition-colors"
@@ -158,10 +184,45 @@ const CatalogPage: React.FC = () => {
           </button>
         </div>
         
+        {/* Search Bar */}
+        <div className="mb-6">
+          <div className="relative max-w-md">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <Search className="h-5 w-5 text-gray-400 dark:text-dark-muted" />
+            </div>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search products..."
+              className="block w-full pl-10 pr-10 py-3 border border-gray-200 dark:border-dark-accent rounded-xl bg-white dark:bg-dark-accent text-jewelry-dark dark:text-dark-text placeholder-gray-400 dark:placeholder-dark-muted focus:outline-none focus:ring-2 focus:ring-purple-500/20 dark:focus:ring-purple-400/20 focus:border-purple-500 dark:focus:border-purple-400 transition-colors"
+            />
+            {searchQuery && (
+              <button
+                onClick={clearSearch}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center hover:text-purple-500 dark:hover:text-purple-400 transition-colors"
+              >
+                <X className="h-5 w-5 text-gray-400 dark:text-dark-muted" />
+              </button>
+            )}
+          </div>
+        </div>
+        
         {/* Active Filters */}
-        {(activeCategory !== 'all' || activeCollection) && (
+        {(activeCategory !== 'all' || activeCollection || searchQuery) && (
           <div className="flex items-center gap-2 mb-4">
             <span className="text-sm text-gray-600 dark:text-dark-muted">Active filters:</span>
+            {searchQuery && (
+              <span className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-full text-xs font-medium flex items-center gap-1">
+                Search: "{searchQuery.length > 20 ? searchQuery.substring(0, 20) + '...' : searchQuery}"
+                <button
+                  onClick={clearSearch}
+                  className="ml-1 hover:bg-green-200 dark:hover:bg-green-800 rounded-full p-0.5"
+                >
+                  ×
+                </button>
+              </span>
+            )}
             {activeCategory !== 'all' && (
               <span className="px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-full text-xs font-medium flex items-center gap-1">
                 {categories.find(c => c.id === activeCategory)?.name || activeCategory}
@@ -241,7 +302,7 @@ const CatalogPage: React.FC = () => {
         )}
         
         <AnimatePresence mode="wait">
-          <Catalog key={activeCategory} items={filteredItems} onItemClick={handleItemClick} />
+          <Catalog key={`${activeCategory}-${activeCollection}-${searchQuery}`} items={filteredItems} onItemClick={handleItemClick} />
         </AnimatePresence>
       </motion.div>
     </div>

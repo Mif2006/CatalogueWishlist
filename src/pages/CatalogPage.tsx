@@ -5,10 +5,14 @@ import Catalog from '../components/Catalog';
 import { useCatalogData } from '../hooks/useCatalogData';
 
 const categories = [
-  { id: 'ring', name: 'Rings' },
-  { id: 'necklace', name: 'Necklaces' },
-  { id: 'bracelet', name: 'Bracelets' },
-  { id: 'earring', name: 'Earrings' },
+  { id: 'new', name: 'New Arrivals' },
+  { id: 'rings', name: 'Rings' },
+  { id: 'falange', name: 'Falange Rings' },
+  { id: 'bracelets', name: 'Bracelets' },
+  { id: 'chains', name: 'Chains' },
+  { id: 'mens', name: 'Mens Wear' },
+  { id: 'pendants', name: 'Pendants' },
+  { id: 'earrings', name: 'Earrings' },
 ];
 
 const CatalogPage: React.FC = () => {
@@ -17,6 +21,8 @@ const CatalogPage: React.FC = () => {
 
   const filteredItems = React.useMemo(() => {
     if (activeCategory === 'all') return items;
+    if (activeCategory === 'new') return items.filter(item => item.isNew);
+    if (activeCategory === 'rings') return items.filter(item => item.category === 'ring');
     return items.filter(item => item.category === activeCategory);
   }, [items, activeCategory]);
 

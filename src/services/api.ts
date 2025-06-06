@@ -60,7 +60,7 @@ export const transformProductData = (product: ProductData) => {
     price: parseInt(product.price),
     description: `Beautiful ${product.type} from our collection`,
     imageUrl: product.imgLink,
-    category: product.type,
+    category: product.type, // This will be 'ring' from your data
     sizes: parseSizes(product.sizes),
     isNew: product.newItem === 'TRUE',
     collection: product.collection !== 'FALSE' ? product.collection : null,

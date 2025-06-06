@@ -129,8 +129,8 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product, onBack }
               {/* Badges */}
               <div className="absolute top-4 left-4 flex flex-col space-y-2">
                 {product.isNew && (
-                  <div className="px-3 py-1 bg-purple-gradient rounded-full">
-                    <span className="text-xs text-white font-medium">New</span>
+                  <div className="px-3 py-1 bg-purple-gradient rounded-full flex items-center justify-center">
+                    <span className="text-xs text-white font-medium text-center">New</span>
                   </div>
                 )}
                 {product.collection && (

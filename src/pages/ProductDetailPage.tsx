@@ -44,6 +44,12 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product, onBack }
       return;
     }
     
+    const selectedSizeStock = selectedSize ? product.sizes[selectedSize] || 0 : 0;
+    if (Object.keys(product.sizes).length > 0 && selectedSizeStock < quantity) {
+      alert(`Only ${selectedSizeStock} items available in size ${selectedSize}`);
+      return;
+    }
+    
     dispatch({ 
       type: 'ADD_ITEM', 
       payload: { 
@@ -255,7 +261,8 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product, onBack }
                   </span>
                   <button
                     onClick={() => setQuantity(Math.min(selectedSizeStock || 10, quantity + 1))}
-                    className="p-2 hover:bg-gray-50 dark:hover:bg-dark-accent transition-colors"
+                    disabled={quantity >= selectedSizeStock && selectedSizeStock > 0}
+                    className="p-2 hover:bg-gray-50 dark:hover:bg-dark-accent transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <ChevronRight size={20} />
                   </button>

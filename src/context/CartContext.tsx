@@ -1,7 +1,11 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import type { Purchase, WishlistItem } from '../types';
 
-type CartItem = (Purchase | WishlistItem) & { quantity: number; selectedSize?: string };
+type CartItem = (Purchase | WishlistItem) & { 
+  quantity: number; 
+  selectedSize?: string;
+  sizes?: Record<string, number>;
+};
 
 interface CartState {
   items: CartItem[];
@@ -9,7 +13,7 @@ interface CartState {
 }
 
 type CartAction =
-  | { type: 'ADD_ITEM'; payload: Purchase | WishlistItem }
+  | { type: 'ADD_ITEM'; payload: Purchase | WishlistItem & { selectedSize?: string } }
   | { type: 'REMOVE_ITEM'; payload: string }
   | { type: 'TOGGLE_WISHLIST'; payload: WishlistItem }
   | { type: 'UPDATE_QUANTITY'; payload: { id: string; quantity: number } }
@@ -25,36 +29,71 @@ const CartContext = createContext<{
 const cartReducer = (state: CartState, action: CartAction): CartState => {
   switch (action.type) {
     case 'ADD_ITEM': {
-      const existingItem = state.items.find(item => item.id === action.payload.id);
+      const itemWithSize = action.payload as CartItem;
+      
+      // Create a unique identifier that includes size if present
+      const itemKey = itemWithSize.selectedSize 
+        ? `${itemWithSize.id}-${itemWithSize.selectedSize}`
+        : itemWithSize.id;
+      
+      const existingItem = state.items.find(item => {
+        const existingKey = item.selectedSize 
+          ? `${item.id}-${item.selectedSize}`
+          : item.id;
+        return existingKey === itemKey;
+      });
+      
       if (existingItem) {
+        // Get available stock for this size
+        const availableStock = itemWithSize.sizes && itemWithSize.selectedSize 
+          ? itemWithSize.sizes[itemWithSize.selectedSize] || 0
+          : 999;
+        
         return {
           ...state,
-          items: state.items.map(item =>
-            item.id === action.payload.id
-              ? { ...item, quantity: item.quantity + 1 }
-              : item
-          ),
+          items: state.items.map(item => {
+            const existingKey = item.selectedSize 
+              ? `${item.id}-${item.selectedSize}`
+              : item.id;
+            
+            if (existingKey === itemKey) {
+              const newQuantity = Math.min(item.quantity + 1, availableStock);
+              return { ...item, quantity: newQuantity };
+            }
+            return item;
+          }),
         };
       }
+      
       return {
         ...state,
-        items: [...state.items, { ...action.payload, quantity: 1 }],
+        items: [...state.items, { ...itemWithSize, quantity: 1 }],
       };
     }
     case 'REMOVE_ITEM':
       return {
         ...state,
-        items: state.items.filter(item => item.id !== action.payload),
+        items: state.items.filter(item => {
+          const itemKey = item.selectedSize 
+            ? `${item.id}-${item.selectedSize}`
+            : item.id;
+          return itemKey !== action.payload;
+        }),
         isOpen: state.items.length === 1 ? false : state.isOpen,
       };
     case 'UPDATE_QUANTITY':
       return {
         ...state,
-        items: state.items.map(item =>
-          item.id === action.payload.id
-            ? { ...item, quantity: action.payload.quantity }
-            : item
-        ),
+        items: state.items.map(item => {
+          const itemKey = item.selectedSize 
+            ? `${item.id}-${item.selectedSize}`
+            : item.id;
+          
+          if (itemKey === action.payload.id) {
+            return { ...item, quantity: action.payload.quantity };
+          }
+          return item;
+        }),
       };
     case 'TOGGLE_CART':
       return {

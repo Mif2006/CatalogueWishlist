@@ -9,7 +9,6 @@ import { CartProvider } from './context/CartContext';
 import BackToTop from './components/BackToTop';
 import Navbar from './components/Navbar';
 import MinimizedNavbar from './components/MinimizedNavbar';
-import UndoToast from './components/UndoToast';
 
 function App() {
   const [darkMode, setDarkMode] = useState(() => {
@@ -165,7 +164,6 @@ function App() {
         <BackToTop />
               </>
         )}
-        <UndoToast />
       </div>
     </CartProvider>
   );

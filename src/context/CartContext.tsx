@@ -10,14 +10,11 @@ type CartItem = (Purchase | WishlistItem) & {
 interface CartState {
   items: CartItem[];
   isOpen: boolean;
-  removedItem: { item: CartItem; timestamp: number } | null;
 }
 
 type CartAction =
   | { type: 'ADD_ITEM'; payload: Purchase | WishlistItem & { selectedSize?: string; quantity?: number } }
   | { type: 'REMOVE_ITEM'; payload: string }
-  | { type: 'UNDO_REMOVE' }
-  | { type: 'CLEAR_REMOVED_ITEM' }
   | { type: 'TOGGLE_WISHLIST'; payload: WishlistItem }
   | { type: 'UPDATE_QUANTITY'; payload: { id: string; quantity: number } }
   | { type: 'TOGGLE_CART' };
@@ -88,22 +85,7 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
             : item.id;
           return itemKey !== action.payload;
         }),
-        removedItem: { item: itemToRemove, timestamp: Date.now() },
         isOpen: state.items.length === 1 ? false : state.isOpen,
-      };
-    case 'UNDO_REMOVE': {
-      if (!state.removedItem) return state;
-      
-      return {
-        ...state,
-        items: [...state.items, state.removedItem.item],
-        removedItem: null,
-      };
-    }
-    case 'CLEAR_REMOVED_ITEM':
-      return {
-        ...state,
-        removedItem: null,
       };
     case 'UPDATE_QUANTITY':
       return {
@@ -133,7 +115,6 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const initialState = {
     items: [],
     isOpen: false,
-    removedItem: null,
   };
   const [wishlist, setWishlist] = React.useState<WishlistItem[]>(() => {
     try {
@@ -158,16 +139,6 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const [state, dispatch] = useReducer(cartReducer, initialState);
 
-  // Auto-clear removed item after 3 seconds
-  useEffect(() => {
-    if (state.removedItem) {
-      const timer = setTimeout(() => {
-        dispatch({ type: 'CLEAR_REMOVED_ITEM' });
-      }, 3000);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [state.removedItem]);
   // Save cart to localStorage
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify({ items: state.items }));

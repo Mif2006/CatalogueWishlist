@@ -124,8 +124,8 @@ const Cart: React.FC = () => {
                               ₽{(item.price * item.quantity).toLocaleString()}
                             </p>
                             
-                            {/* Stock warning */}
-                            {availableStock <= 5 && availableStock > 0 && (
+                            {/* Stock warning - only show when user tries to exceed stock */}
+                            {item.quantity >= availableStock && availableStock > 0 && availableStock <= 5 && (
                               <p className="text-xs text-orange-500 dark:text-orange-400 mb-2">
                                 Only {availableStock} left in stock
                               </p>

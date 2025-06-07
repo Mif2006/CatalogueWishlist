@@ -11,19 +11,11 @@ const Cart: React.FC = () => {
     0
   );
 
-  const updateQuantity = (id: string, quantity: number, selectedSize?: string) => {
+  const updateQuantity = (id: string, quantity: number) => {
     if (quantity < 1) {
       dispatch({ type: 'REMOVE_ITEM', payload: id });
     } else {
-      // Find the item to check stock limits
-      const item = state.items.find(cartItem => cartItem.id === id);
-      if (item && selectedSize && item.sizes) {
-        const availableStock = item.sizes[selectedSize] || 0;
-        const maxQuantity = Math.min(quantity, availableStock);
-        dispatch({ type: 'UPDATE_QUANTITY', payload: { id, quantity: maxQuantity } });
-      } else {
-        dispatch({ type: 'UPDATE_QUANTITY', payload: { id, quantity } });
-      }
+      dispatch({ type: 'UPDATE_QUANTITY', payload: { id, quantity } });
     }
   };
   
@@ -80,90 +72,60 @@ const Cart: React.FC = () => {
               <div className="flex-1 overflow-y-auto">
                 <div className="px-6 py-6">
                   <div className="space-y-4">
-                    {state.items.map(item => {
-                      const availableStock = item.selectedSize && item.sizes ? item.sizes[item.selectedSize] || 0 : 10;
-                      const isAtMaxStock = item.quantity >= availableStock;
-                      
-                      return (
-                        <motion.div
-                          key={item.id}
-                          layout
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, scale: 0.95 }}
-                          className="flex space-x-4 bg-gray-50 dark:bg-dark-accent/30 p-4 rounded-xl border border-gray-100 dark:border-dark-accent"
-                        >
-                          <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-white dark:bg-dark-card shadow-md">
-                            <img
-                              src={item.imageUrl}
-                              alt={item.name}
-                              className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
-                            />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <h3 className="font-serif text-jewelry-dark dark:text-dark-text text-sm mb-1 truncate">
-                              {item.name}
-                            </h3>
-                            {item.selectedSize && (
-                              <p className="text-xs text-gray-500 dark:text-dark-muted mb-1">
-                                Size: {item.selectedSize}
-                              </p>
-                            )}
-                            <p className="text-purple-500 dark:text-purple-400 font-medium text-lg mb-3">
-                              ₽{(item.price * item.quantity).toLocaleString()}
-                            </p>
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center space-x-1 bg-white dark:bg-dark-card rounded-lg shadow-sm">
-                                <button
-                                  onClick={() => updateQuantity(item.id, item.quantity - 1, item.selectedSize)}
-                                  className="p-1.5 hover:bg-gray-100 dark:hover:bg-dark-accent rounded-lg transition-colors"
-                                  aria-label="Decrease quantity"
-                                >
-                                  <Minus size={14} className="text-gray-500 dark:text-dark-muted" />
-                                </button>
-                                <span className="w-8 text-center font-medium text-jewelry-dark dark:text-dark-text text-sm">
-                                  {item.quantity}
-                                </span>
-                                <button
-                                  onClick={() => updateQuantity(item.id, item.quantity + 1, item.selectedSize)}
-                                  disabled={isAtMaxStock}
-                                  className={`p-1.5 rounded-lg transition-colors ${
-                                    isAtMaxStock 
-                                      ? 'opacity-50 cursor-not-allowed' 
-                                      : 'hover:bg-gray-100 dark:hover:bg-dark-accent'
-                                  }`}
-                                  aria-label="Increase quantity"
-                                >
-                                  <Plus size={14} className="text-gray-500 dark:text-dark-muted" />
-                                </button>
-                              </div>
+                    {state.items.map(item => (
+                      <motion.div
+                        key={item.id}
+                        layout
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        className="flex space-x-4 bg-gray-50 dark:bg-dark-accent/30 p-4 rounded-xl border border-gray-100 dark:border-dark-accent"
+                      >
+                        <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-white dark:bg-dark-card shadow-md">
+                          <img
+                            src={item.imageUrl}
+                            alt={item.name}
+                            className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
+                          />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-serif text-jewelry-dark dark:text-dark-text text-sm mb-1 truncate">
+                            {item.name}
+                          </h3>
+                          <p className="text-purple-500 dark:text-purple-400 font-medium text-lg mb-3">
+                            ₽{(item.price * item.quantity).toLocaleString()}
+                          </p>
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-1 bg-white dark:bg-dark-card rounded-lg shadow-sm">
                               <button
-                                onClick={() => dispatch({ type: 'REMOVE_ITEM', payload: item.id })}
-                                className="p-1.5 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg text-red-500 hover:text-red-600 transition-colors"
-                                aria-label="Remove item"
+                                onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                                className="p-1.5 hover:bg-gray-100 dark:hover:bg-dark-accent rounded-lg transition-colors"
+                                aria-label="Decrease quantity"
                               >
-                                <Trash2 size={14} />
+                                <Minus size={14} className="text-gray-500 dark:text-dark-muted" />
+                              </button>
+                              <span className="w-8 text-center font-medium text-jewelry-dark dark:text-dark-text text-sm">
+                                {item.quantity}
+                              </span>
+                              <button
+                                onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                                className="p-1.5 hover:bg-gray-100 dark:hover:bg-dark-accent rounded-lg transition-colors"
+                                aria-label="Increase quantity"
+                              >
+                                <Plus size={14} className="text-gray-500 dark:text-dark-muted" />
                               </button>
                             </div>
-                            {item.selectedSize && item.sizes && (
-                              <div className="mt-2">
-                                <p className="text-xs text-gray-500 dark:text-dark-muted">
-                                  {availableStock > 0 ? (
-                                    <span className="text-green-600 dark:text-green-400">
-                                      {availableStock} available
-                                    </span>
-                                  ) : (
-                                    <span className="text-red-500 dark:text-red-400">
-                                      Out of stock
-                                    </span>
-                                  )}
-                                </p>
-                              </div>
-                            )}
+                            <button
+                              onClick={() => dispatch({ type: 'REMOVE_ITEM', payload: item.id })}
+                              className="p-1.5 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg text-red-500 hover:text-red-600 transition-colors"
+                              aria-label="Remove item"
+                            >
+                              <Trash2 size={14} />
+                            </button>
                           </div>
-                        </motion.div>
-                      );
-                    })}
+                        </div>
+                      </motion.div>
+                    ))}
                     
                     {state.items.length === 0 && (
                       <div className="text-center py-12">

@@ -140,7 +140,12 @@ const Cart: React.FC = () => {
                             <div className="flex items-center justify-between">
                               <div className="flex items-center space-x-1 bg-white dark:bg-dark-card rounded-lg shadow-sm">
                                 <button
-                                  onClick={() => updateQuantity(item.id, item.quantity - 1, availableStock)}
+                                  onClick={() => {
+                                    const itemKey = item.selectedSize 
+                                      ? `${item.id}-${item.selectedSize}`
+                                      : item.id;
+                                    updateQuantity(itemKey, item.quantity - 1, availableStock);
+                                  }}
                                   className="p-1.5 hover:bg-gray-100 dark:hover:bg-dark-accent rounded-lg transition-colors"
                                   aria-label="Decrease quantity"
                                 >
@@ -150,7 +155,12 @@ const Cart: React.FC = () => {
                                   {item.quantity}
                                 </span>
                                 <button
-                                  onClick={() => updateQuantity(item.id, item.quantity + 1, availableStock)}
+                                  onClick={() => {
+                                    const itemKey = item.selectedSize 
+                                      ? `${item.id}-${item.selectedSize}`
+                                      : item.id;
+                                    updateQuantity(itemKey, item.quantity + 1, availableStock);
+                                  }}
                                   disabled={item.quantity >= availableStock}
                                   className="p-1.5 hover:bg-gray-100 dark:hover:bg-dark-accent rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                   aria-label="Increase quantity"
@@ -159,7 +169,12 @@ const Cart: React.FC = () => {
                                 </button>
                               </div>
                               <button
-                                onClick={() => dispatch({ type: 'REMOVE_ITEM', payload: item.id })}
+                                onClick={() => {
+                                  const itemKey = item.selectedSize 
+                                    ? `${item.id}-${item.selectedSize}`
+                                    : item.id;
+                                  dispatch({ type: 'REMOVE_ITEM', payload: itemKey });
+                                }}
                                 className="p-1.5 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg text-red-500 hover:text-red-600 transition-colors"
                                 aria-label="Remove item"
                               >

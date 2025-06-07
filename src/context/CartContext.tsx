@@ -13,7 +13,7 @@ interface CartState {
 }
 
 type CartAction =
-  | { type: 'ADD_ITEM'; payload: Purchase | WishlistItem & { selectedSize?: string } }
+  | { type: 'ADD_ITEM'; payload: Purchase | WishlistItem & { selectedSize?: string; quantity?: number } }
   | { type: 'REMOVE_ITEM'; payload: string }
   | { type: 'TOGGLE_WISHLIST'; payload: WishlistItem }
   | { type: 'UPDATE_QUANTITY'; payload: { id: string; quantity: number } }
@@ -49,6 +49,9 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
           ? itemWithSize.sizes[itemWithSize.selectedSize] || 0
           : 999;
         
+        // Use the quantity from payload or default to 1
+        const quantityToAdd = itemWithSize.quantity || 1;
+        
         return {
           ...state,
           items: state.items.map(item => {
@@ -57,7 +60,7 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
               : item.id;
             
             if (existingKey === itemKey) {
-              const newQuantity = Math.min(item.quantity + 1, availableStock);
+              const newQuantity = Math.min(item.quantity + quantityToAdd, availableStock);
               return { ...item, quantity: newQuantity };
             }
             return item;
@@ -65,9 +68,12 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
         };
       }
       
+      // Use the quantity from payload or default to 1
+      const initialQuantity = itemWithSize.quantity || 1;
+      
       return {
         ...state,
-        items: [...state.items, { ...itemWithSize, quantity: 1 }],
+        items: [...state.items, { ...itemWithSize, quantity: initialQuantity }],
       };
     }
     case 'REMOVE_ITEM':

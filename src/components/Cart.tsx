@@ -51,7 +51,7 @@ const Cart: React.FC = () => {
               transition={{ type: 'spring', damping: 30, stiffness: 300 }}
               className="fixed right-0 top-0 h-full w-full max-w-[400px] bg-white dark:bg-dark-card shadow-2xl z-50 flex flex-col"
             >
-              <div className="px-6 h-16 border-b border-gray-100 dark:border-dark-accent flex justify-between items-center bg-white dark:bg-dark-card sticky top-0 z-10">
+              <div className="px-6 py-4 border-b border-gray-100 dark:border-dark-accent flex justify-between items-center bg-white dark:bg-dark-card flex-shrink-0">
                 <div className="flex items-center space-x-3">
                   <ShoppingCart className="text-purple-500 dark:text-purple-400" size={24} />
                   <h2 className="text-xl font-serif text-jewelry-dark dark:text-dark-text">
@@ -67,8 +67,8 @@ const Cart: React.FC = () => {
                 </button>
               </div>
 
-              <div className="flex-1 overflow-y-auto px-4 py-6">
-                <div className="space-y-6">
+              <div className="flex-1 overflow-y-auto px-6 py-6 min-h-0">
+                <div className="space-y-4">
                   {state.items.map(item => (
                     <motion.div
                       key={item.id}
@@ -134,7 +134,7 @@ const Cart: React.FC = () => {
               </div>
 
               {state.items.length > 0 && (
-                <div className="p-6 border-t border-gray-100 dark:border-dark-accent bg-white dark:bg-dark-card sticky bottom-0">
+                <div className="p-6 border-t border-gray-100 dark:border-dark-accent bg-white dark:bg-dark-card flex-shrink-0">
                   <div className="flex justify-between items-center mb-6">
                     <span className="text-jewelry-dark dark:text-dark-text text-lg">Total</span>
                     <span className="text-2xl font-serif text-purple-500 dark:text-purple-400">

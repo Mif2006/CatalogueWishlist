@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Heart, Share2, ShoppingCart, Package } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import SizeSelectionModal from './SizeSelectionModal';
 import type { CatalogItem } from '../hooks/useCatalogData';
 
 interface CatalogProps {
@@ -11,6 +12,26 @@ interface CatalogProps {
 
 const Catalog: React.FC<CatalogProps> = ({ items, onItemClick }) => {
   const { dispatch, wishlist, toggleWishlist } = useCart();
+  const [selectedProduct, setSelectedProduct] = React.useState<CatalogItem | null>(null);
+  const [showSizeModal, setShowSizeModal] = React.useState(false);
+  
+  const handleAddToCart = (item: CatalogItem, e: React.MouseEvent) => {
+    e.stopPropagation();
+    
+    // If item has sizes, show size selection modal
+    if (Object.keys(item.sizes).length > 0) {
+      setSelectedProduct(item);
+      setShowSizeModal(true);
+    } else {
+      // If no sizes, add directly to cart
+      dispatch({ type: 'ADD_ITEM', payload: { ...item, quantity: 1 } });
+    }
+  };
+  
+  const closeSizeModal = () => {
+    setShowSizeModal(false);
+    setSelectedProduct(null);
+  };
   
   if (items.length === 0) {
     return (
@@ -95,20 +116,33 @@ const Catalog: React.FC<CatalogProps> = ({ items, onItemClick }) => {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  dispatch({ type: 'ADD_ITEM', payload: { ...item, quantity: 1 } });
-                }}
+                onClick={(e) => handleAddToCart(item, e)}
                 disabled={Object.keys(item.sizes).length > 0 && Object.values(item.sizes).every(qty => qty === 0)}
                 className="flex-1 px-3 py-2 bg-purple-gradient rounded-lg text-white font-medium text-xs hover:opacity-90 hover:shadow-lg transition-all duration-200 flex items-center justify-center space-x-1 disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
               >
                 <ShoppingCart size={14} />
-                <span>{Object.keys(item.sizes).length > 0 && Object.values(item.sizes).every(qty => qty === 0) ? 'Out of Stock' : 'Add to Cart'}</span>
+                <span>
+                  {Object.keys(item.sizes).length > 0 && Object.values(item.sizes).every(qty => qty === 0) 
+                    ? 'Out of Stock' 
+                    : Object.keys(item.sizes).length > 0 
+                      ? 'Select Size'
+                      : 'Add to Cart'
+                  }
+                </span>
               </motion.button>
             </div>
           </div>
         </motion.div>
       ))}
+      
+      {/* Size Selection Modal */}
+      {selectedProduct && (
+        <SizeSelectionModal
+          isOpen={showSizeModal}
+          onClose={closeSizeModal}
+          product={selectedProduct}
+        />
+      )}
     </div>
   );
 };

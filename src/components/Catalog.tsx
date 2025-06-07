@@ -124,9 +124,7 @@ const Catalog: React.FC<CatalogProps> = ({ items, onItemClick }) => {
                 <span>
                   {Object.keys(item.sizes).length > 0 && Object.values(item.sizes).every(qty => qty === 0) 
                     ? 'Out of Stock' 
-                    : Object.keys(item.sizes).length > 0 
-                      ? 'Select Size'
-                      : 'Add to Cart'
+                    : 'Add to Cart'
                   }
                 </span>
               </motion.button>

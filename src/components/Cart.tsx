@@ -7,12 +7,29 @@ const Cart: React.FC = () => {
   const { state, dispatch } = useCart();
   const [pendingDeletes, setPendingDeletes] = useState<Set<string>>(new Set());
   const [deleteTimers, setDeleteTimers] = useState<Map<string, NodeJS.Timeout>>(new Map());
+  const cartRef = React.useRef<HTMLDivElement>(null);
   
   const totalPrice = state.items.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
   );
 
+  // Handle clicks outside the cart
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (state.isOpen && cartRef.current && !cartRef.current.contains(event.target as Node)) {
+        dispatch({ type: 'TOGGLE_CART' });
+      }
+    };
+
+    if (state.isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [state.isOpen, dispatch]);
   const updateQuantity = (id: string, quantity: number, maxStock?: number) => {
     if (quantity < 1) {
       dispatch({ type: 'REMOVE_ITEM', payload: id });
@@ -117,6 +134,7 @@ const Cart: React.FC = () => {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+              ref={cartRef}
               className="fixed right-0 top-0 h-screen w-full max-w-[400px] bg-white dark:bg-dark-card shadow-2xl z-50 flex flex-col"
             >
               {/* Header */}

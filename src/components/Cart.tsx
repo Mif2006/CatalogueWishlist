@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingCart, X, Plus, Minus, Trash2 } from 'lucide-react';
+import { ShoppingCart, X, Plus, Minus, Trash2, RotateCcw } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 
 const Cart: React.FC = () => {
   const { state, dispatch } = useCart();
+  const [pendingDeletes, setPendingDeletes] = useState<Set<string>>(new Set());
+  const [deleteTimers, setDeleteTimers] = useState<Map<string, NodeJS.Timeout>>(new Map());
   
   const totalPrice = state.items.reduce(
     (sum, item) => sum + item.price * item.quantity,
@@ -34,6 +36,56 @@ const Cart: React.FC = () => {
     const availableSizes = Object.entries(item.sizes).filter(([_, qty]) => (qty as number) > 0);
     return availableSizes.length > 0 ? (availableSizes[0][1] as number) : 0;
   };
+
+  const handleDeleteClick = (itemId: string) => {
+    // Add to pending deletes
+    setPendingDeletes(prev => new Set([...prev, itemId]));
+    
+    // Set up timer for actual deletion
+    const timer = setTimeout(() => {
+      dispatch({ type: 'REMOVE_ITEM', payload: itemId });
+      setPendingDeletes(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(itemId);
+        return newSet;
+      });
+      setDeleteTimers(prev => {
+        const newMap = new Map(prev);
+        newMap.delete(itemId);
+        return newMap;
+      });
+    }, 3000);
+
+    setDeleteTimers(prev => new Map([...prev, [itemId, timer]]));
+  };
+
+  const handleUndoDelete = (itemId: string) => {
+    // Clear the timer
+    const timer = deleteTimers.get(itemId);
+    if (timer) {
+      clearTimeout(timer);
+    }
+    
+    // Remove from pending deletes
+    setPendingDeletes(prev => {
+      const newSet = new Set(prev);
+      newSet.delete(itemId);
+      return newSet;
+    });
+    
+    setDeleteTimers(prev => {
+      const newMap = new Map(prev);
+      newMap.delete(itemId);
+      return newMap;
+    });
+  };
+
+  // Cleanup timers on unmount
+  useEffect(() => {
+    return () => {
+      deleteTimers.forEach(timer => clearTimeout(timer));
+    };
+  }, []);
   
   return (
     <>
@@ -91,15 +143,19 @@ const Cart: React.FC = () => {
                     {state.items.map(item => {
                       const availableStock = getAvailableStock(item);
                       const isOutOfStock = availableStock === 0;
+                      const itemKey = item.selectedSize 
+                        ? `${item.id}-${item.selectedSize}`
+                        : item.id;
+                      const isPendingDelete = pendingDeletes.has(itemKey);
                       
                       return (
                         <motion.div
-                          key={item.id}
+                          key={itemKey}
                           layout
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, scale: 0.95 }}
-                          className="flex space-x-4 bg-gray-50 dark:bg-dark-accent/30 p-4 rounded-xl border border-gray-100 dark:border-dark-accent"
+                          className="relative flex space-x-4 bg-gray-50 dark:bg-dark-accent/30 p-4 rounded-xl border border-gray-100 dark:border-dark-accent"
                         >
                           <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-white dark:bg-dark-card shadow-md">
                             <img
@@ -140,12 +196,7 @@ const Cart: React.FC = () => {
                             <div className="flex items-center justify-between">
                               <div className="flex items-center space-x-1 bg-white dark:bg-dark-card rounded-lg shadow-sm">
                                 <button
-                                  onClick={() => {
-                                    const itemKey = item.selectedSize 
-                                      ? `${item.id}-${item.selectedSize}`
-                                      : item.id;
-                                    updateQuantity(itemKey, item.quantity - 1, availableStock);
-                                  }}
+                                  onClick={() => updateQuantity(itemKey, item.quantity - 1, availableStock)}
                                   className="p-1.5 hover:bg-gray-100 dark:hover:bg-dark-accent rounded-lg transition-colors"
                                   aria-label="Decrease quantity"
                                 >
@@ -155,12 +206,7 @@ const Cart: React.FC = () => {
                                   {item.quantity}
                                 </span>
                                 <button
-                                  onClick={() => {
-                                    const itemKey = item.selectedSize 
-                                      ? `${item.id}-${item.selectedSize}`
-                                      : item.id;
-                                    updateQuantity(itemKey, item.quantity + 1, availableStock);
-                                  }}
+                                  onClick={() => updateQuantity(itemKey, item.quantity + 1, availableStock)}
                                   disabled={item.quantity >= availableStock}
                                   className="p-1.5 hover:bg-gray-100 dark:hover:bg-dark-accent rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                   aria-label="Increase quantity"
@@ -169,12 +215,7 @@ const Cart: React.FC = () => {
                                 </button>
                               </div>
                               <button
-                                onClick={() => {
-                                  const itemKey = item.selectedSize 
-                                    ? `${item.id}-${item.selectedSize}`
-                                    : item.id;
-                                  dispatch({ type: 'REMOVE_ITEM', payload: itemKey });
-                                }}
+                                onClick={() => handleDeleteClick(itemKey)}
                                 className="p-1.5 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg text-red-500 hover:text-red-600 transition-colors"
                                 aria-label="Remove item"
                               >
@@ -182,6 +223,70 @@ const Cart: React.FC = () => {
                               </button>
                             </div>
                           </div>
+
+                          {/* Glassmorphism Delete Overlay */}
+                          <AnimatePresence>
+                            {isPendingDelete && (
+                              <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                className="absolute inset-0 bg-white/80 dark:bg-dark-card/80 backdrop-blur-sm rounded-xl flex flex-col items-center justify-center z-10 border border-red-200 dark:border-red-800"
+                              >
+                                <div className="text-center">
+                                  <motion.div
+                                    initial={{ scale: 0 }}
+                                    animate={{ scale: 1 }}
+                                    className="w-12 h-12 mx-auto mb-3 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center"
+                                  >
+                                    <Trash2 size={20} className="text-red-500 dark:text-red-400" />
+                                  </motion.div>
+                                  
+                                  <p className="text-sm font-medium text-red-600 dark:text-red-400 mb-2">
+                                    Removing item...
+                                  </p>
+                                  
+                                  {/* Animated Timer Circle */}
+                                  <div className="relative w-8 h-8 mx-auto mb-3">
+                                    <svg className="w-8 h-8 transform -rotate-90" viewBox="0 0 32 32">
+                                      <circle
+                                        cx="16"
+                                        cy="16"
+                                        r="14"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                        fill="none"
+                                        className="text-red-200 dark:text-red-800"
+                                      />
+                                      <motion.circle
+                                        cx="16"
+                                        cy="16"
+                                        r="14"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                        fill="none"
+                                        strokeLinecap="round"
+                                        className="text-red-500 dark:text-red-400"
+                                        initial={{ strokeDasharray: "88", strokeDashoffset: "0" }}
+                                        animate={{ strokeDashoffset: "88" }}
+                                        transition={{ duration: 3, ease: "linear" }}
+                                      />
+                                    </svg>
+                                  </div>
+                                  
+                                  <motion.button
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    onClick={() => handleUndoDelete(itemKey)}
+                                    className="px-4 py-2 bg-purple-gradient rounded-lg text-white font-medium text-sm hover:opacity-90 transition-opacity flex items-center space-x-2 shadow-lg"
+                                  >
+                                    <RotateCcw size={14} />
+                                    <span>Undo</span>
+                                  </motion.button>
+                                </div>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
                         </motion.div>
                       );
                     })}

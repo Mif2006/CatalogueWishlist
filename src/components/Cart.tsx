@@ -231,47 +231,30 @@ const Cart: React.FC = () => {
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
-                                className="absolute inset-0 bg-white/80 dark:bg-dark-card/80 backdrop-blur-sm rounded-xl flex flex-col items-center justify-center z-10 border border-red-200 dark:border-red-800"
+                                className="absolute inset-0 bg-white/90 dark:bg-dark-card/90 backdrop-blur-sm rounded-xl flex flex-col items-center justify-center z-10 overflow-hidden"
                               >
                                 <div className="text-center">
-                                  <motion.div
-                                    initial={{ scale: 0 }}
-                                    animate={{ scale: 1 }}
-                                    className="w-12 h-12 mx-auto mb-3 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center"
-                                  >
-                                    <Trash2 size={20} className="text-red-500 dark:text-red-400" />
-                                  </motion.div>
-                                  
-                                  <p className="text-sm font-medium text-red-600 dark:text-red-400 mb-2">
-                                    Removing item...
+                                  <p className="text-sm font-medium text-jewelry-dark dark:text-dark-text mb-4">
+                                    Are you sure you want to remove this item?
                                   </p>
                                   
-                                  {/* Animated Timer Circle */}
-                                  <div className="relative w-8 h-8 mx-auto mb-3">
-                                    <svg className="w-8 h-8 transform -rotate-90" viewBox="0 0 32 32">
-                                      <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="14"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                        fill="none"
-                                        className="text-red-200 dark:text-red-800"
-                                      />
+                                  {/* Red Circle Timer */}
+                                  <div className="relative w-16 h-16 mx-auto mb-4">
+                                    <svg className="w-16 h-16 transform -rotate-90" viewBox="0 0 64 64">
                                       <motion.circle
-                                        cx="16"
-                                        cy="16"
-                                        r="14"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                        fill="none"
-                                        strokeLinecap="round"
+                                        cx="32"
+                                        cy="32"
+                                        r="28"
+                                        fill="currentColor"
                                         className="text-red-500 dark:text-red-400"
-                                        initial={{ strokeDasharray: "88", strokeDashoffset: "0" }}
-                                        animate={{ strokeDashoffset: "88" }}
+                                        initial={{ scale: 1 }}
+                                        animate={{ scale: 0 }}
                                         transition={{ duration: 3, ease: "linear" }}
                                       />
                                     </svg>
+                                    <div className="absolute inset-0 flex items-center justify-center">
+                                      <Trash2 size={20} className="text-white" />
+                                    </div>
                                   </div>
                                   
                                   <motion.button

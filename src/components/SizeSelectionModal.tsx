@@ -123,7 +123,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({ isOpen, onClose
                           key={size}
                           onClick={() => setSelectedSize(size)}
                           disabled={stock === 0}
-                          className={`p-4 rounded-lg border-2 text-center transition-all group relative ${
+                          className={`p-4 rounded-lg border-2 text-center transition-all group relative overflow-hidden h-20 flex flex-col justify-center ${
                             selectedSize === size
                               ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400'
                               : stock > 0
@@ -131,14 +131,47 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({ isOpen, onClose
                               : 'border-gray-200 dark:border-dark-accent bg-gray-50 dark:bg-dark-accent text-gray-400 dark:text-dark-muted cursor-not-allowed opacity-50'
                           }`}
                         >
-                          <div className="text-sm font-medium">{size}</div>
-                          <div className="text-xs mt-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          {/* Size Number - Centered by default, moves up on hover */}
+                          <motion.div 
+                            className="text-lg font-bold absolute inset-0 flex items-center justify-center"
+                            animate={{
+                              y: 0
+                            }}
+                            whileHover={{
+                              y: -8
+                            }}
+                            transition={{
+                              type: "spring",
+                              stiffness: 300,
+                              damping: 20
+                            }}
+                          >
+                            {size}
+                          </motion.div>
+                          
+                          {/* Stock Count - Starts in center, moves down on hover */}
+                          <motion.div 
+                            className="text-xs font-medium absolute inset-0 flex items-center justify-center"
+                            initial={{
+                              y: 0,
+                              opacity: 0
+                            }}
+                            whileHover={{
+                              y: 16,
+                              opacity: 1
+                            }}
+                            transition={{
+                              type: "spring",
+                              stiffness: 300,
+                              damping: 20
+                            }}
+                          >
                             {stock > 0 ? (
                               <span className="text-green-600 dark:text-green-400">{stock} left</span>
                             ) : (
                               <span className="text-red-500 dark:text-red-400">Out of stock</span>
                             )}
-                          </div>
+                          </motion.div>
                         </button>
                       ))}
                     </div>

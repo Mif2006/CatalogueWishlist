@@ -218,14 +218,14 @@ const SizeButton: React.FC<SizeButtonProps> = ({ size, stock, isSelected, onSele
     const handleMouseEnter = () => {
       // Animate size number up
       gsap.to(sizeElement, {
-        y: -12,
+        y: -8,
         duration: 0.4,
         ease: "back.out(1.7)"
       });
 
       // Animate stock count down and fade in
       gsap.to(stockElement, {
-        y: 20,
+        y: 12,
         opacity: 1,
         duration: 0.4,
         ease: "back.out(1.7)"

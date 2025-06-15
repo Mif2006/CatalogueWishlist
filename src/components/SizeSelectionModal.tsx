@@ -134,12 +134,8 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({ isOpen, onClose
                           {/* Size Number - Centered by default, moves up on hover */}
                           <motion.div 
                             className="text-lg font-bold absolute inset-0 flex items-center justify-center"
-                            animate={{
-                              y: 0
-                            }}
-                            whileHover={{
-                              y: -8
-                            }}
+                            initial={{ y: 0 }}
+                            whileHover={{ y: -8 }}
                             transition={{
                               type: "spring",
                               stiffness: 300,

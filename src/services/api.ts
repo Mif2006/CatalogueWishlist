@@ -43,20 +43,26 @@ export const parseSizes = (sizesString: string): Record<string, number> => {
     
     // Check if the string is already a valid JSON object (starts and ends with curly braces)
     if (cleanString.startsWith('{') && cleanString.endsWith('}')) {
-      // Fix unquoted keys by adding quotes around both numeric and string keys
-      const fixedString = cleanString.replace(/(\{|,\s*)([a-zA-Z0-9]+\.?[0-9]*)\s*:/g, '$1"$2":');
-      
-      const parsed = JSON.parse(fixedString);
-      
-      // Convert all values to numbers and ensure proper format
-      const result: Record<string, number> = {};
-      for (const [size, quantity] of Object.entries(parsed)) {
-        result[size] = Number(quantity);
+      try {
+        // First try to parse as-is
+        const parsed = JSON.parse(cleanString);
+        
+        // Convert all values to numbers and ensure proper format
+        const result: Record<string, number> = {};
+        for (const [size, quantity] of Object.entries(parsed)) {
+          result[size] = Number(quantity);
+        }
+        
+        return result;
+      } catch (jsonError) {
+        // If JSON parsing fails, fall back to comma-separated parsing
+        console.warn('JSON parsing failed, falling back to comma-separated parsing:', jsonError);
       }
-      
-      return result;
-    } else {
-      // Handle comma-separated key-value pairs (e.g., "1:10, 2:5" or "Small:5, Large:10")
+    }
+    
+    // Handle comma-separated key-value pairs (e.g., "1:10, 2:5" or "Small:5, Large:10")
+    // This also serves as fallback for malformed JSON
+    {
       const result: Record<string, number> = {};
       
       // Split by comma and process each pair

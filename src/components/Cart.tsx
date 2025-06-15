@@ -17,19 +17,18 @@ const Cart: React.FC = () => {
   // Handle clicks outside the cart
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (state.isOpen && cartRef.current && !cartRef.current.contains(event.target as Node)) {
+      if (cartRef.current && !cartRef.current.contains(event.target as Node)) {
         dispatch({ type: 'TOGGLE_CART' });
       }
     };
 
-    if (state.isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
+    document.addEventListener('mousedown', handleClickOutside);
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [state.isOpen, dispatch]);
+  }, [dispatch]);
+
   const updateQuantity = (id: string, quantity: number, maxStock?: number) => {
     if (quantity < 1) {
       dispatch({ type: 'REMOVE_ITEM', payload: id });

@@ -30,9 +30,7 @@ const Navbar: React.FC<NavbarProps> = ({
             transition={{ duration: 0.5 }}
             className="flex items-center space-x-4"
           >
-            <div className="h-10 w-10 md:h-12 md:w-12 rounded-full bg-purple-gradient flex items-center justify-center">
-              <span className="text-white font-serif text-lg md:text-xl">Z</span>
-            </div>
+        
             <button
               onClick={() => {
                 if (hasEnteredSite) {

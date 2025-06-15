@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ChevronLeft, ChevronRight, Heart, ShoppingCart, Share2, Star } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import SizeButton from '../components/SizeButton';
 import type { CatalogItem } from '../hooks/useCatalogData';
 
 interface ProductDetailPageProps {
@@ -217,27 +218,14 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product, onBack }
                 </h3>
                 <div className="flex flex-wrap gap-2">
                   {Object.entries(product.sizes).map(([size, stock]) => (
-                    <button
+                    <SizeButton
                       key={size}
-                      onClick={() => setSelectedSize(size)}
-                      disabled={stock === 0}
-                      className={`px-4 py-3 rounded-lg border-2 text-center transition-all min-w-[80px] ${
-                        selectedSize === size
-                          ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400'
-                          : stock > 0
-                          ? 'border-gray-200 dark:border-dark-accent hover:border-purple-300 dark:hover:border-purple-500 text-jewelry-dark dark:text-dark-text'
-                          : 'border-gray-200 dark:border-dark-accent bg-gray-50 dark:bg-dark-accent text-gray-400 dark:text-dark-muted cursor-not-allowed opacity-50'
-                      }`}
-                    >
-                      <div className="text-sm font-medium">{size}</div>
-                      <div className="text-xs mt-1">
-                        {stock > 0 ? (
-                          <span className="text-green-600 dark:text-green-400">{stock} left</span>
-                        ) : (
-                          <span className="text-red-500 dark:text-red-400">Out of stock</span>
-                        )}
-                      </div>
-                    </button>
+                      size={size}
+                      stock={stock}
+                      isSelected={selectedSize === size}
+                      onSelect={() => setSelectedSize(size)}
+                      className="min-w-[80px]"
+                    />
                   ))}
                 </div>
               </div>

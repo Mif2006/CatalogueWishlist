@@ -123,7 +123,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({ isOpen, onClose
                           key={size}
                           onClick={() => setSelectedSize(size)}
                           disabled={stock === 0}
-                          className={`p-4 rounded-lg border-2 text-center transition-all ${
+                          className={`p-4 rounded-lg border-2 text-center transition-all group relative ${
                             selectedSize === size
                               ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400'
                               : stock > 0
@@ -132,7 +132,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({ isOpen, onClose
                           }`}
                         >
                           <div className="text-sm font-medium">{size}</div>
-                          <div className="text-xs mt-1">
+                          <div className="text-xs mt-1 opacity-0 group-hover:opacity-100 transition-opacity">
                             {stock > 0 ? (
                               <span className="text-green-600 dark:text-green-400">{stock} left</span>
                             ) : (

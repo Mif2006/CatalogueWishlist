@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ChevronLeft, ChevronRight, Heart, ShoppingCart, Share2, Star } from 'lucide-react';
+import { gsap } from 'gsap';
 import { useCart } from '../context/CartContext';
 import SizeButton from '../components/SizeButton';
 import type { CatalogItem } from '../hooks/useCatalogData';
@@ -15,6 +16,10 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product, onBack }
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [selectedSize, setSelectedSize] = useState<string>('');
   const [quantity, setQuantity] = useState(1);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const imageContainerRef = useRef<HTMLDivElement>(null);
+  const currentImageRef = useRef<HTMLImageElement>(null);
+  const nextImageRef = useRef<HTMLImageElement>(null);
 
   // Combine main image with back images for carousel
   const allImages = [product.imageUrl, ...product.backImages];
@@ -27,16 +32,71 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product, onBack }
     }
   }, [product.sizes, selectedSize]);
 
+  const animateToImage = (newIndex: number, direction: 'left' | 'right') => {
+    if (isAnimating || newIndex === currentImageIndex) return;
+    
+    setIsAnimating(true);
+    
+    const currentImg = currentImageRef.current;
+    const nextImg = nextImageRef.current;
+    const container = imageContainerRef.current;
+    
+    if (!currentImg || !nextImg || !container) {
+      setCurrentImageIndex(newIndex);
+      setIsAnimating(false);
+      return;
+    }
+    
+    // Set up the next image
+    nextImg.src = allImages[newIndex];
+    nextImg.style.display = 'block';
+    
+    // Position the next image based on direction
+    const startX = direction === 'right' ? '100%' : '-100%';
+    const endX = direction === 'right' ? '-100%' : '100%';
+    
+    gsap.set(nextImg, { x: startX, opacity: 1 });
+    
+    // Create timeline for smooth animation
+    const tl = gsap.timeline({
+      onComplete: () => {
+        setCurrentImageIndex(newIndex);
+        setIsAnimating(false);
+        // Reset positions
+        gsap.set(currentImg, { x: '0%', opacity: 1 });
+        gsap.set(nextImg, { x: '0%', opacity: 0, display: 'none' });
+      }
+    });
+    
+    // Animate both images simultaneously
+    tl.to(currentImg, {
+      x: endX,
+      duration: 0.6,
+      ease: "power2.inOut"
+    }, 0)
+    .to(nextImg, {
+      x: '0%',
+      duration: 0.6,
+      ease: "power2.inOut"
+    }, 0);
+  };
+
   const nextImage = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % allImages.length);
+    if (allImages.length <= 1) return;
+    const newIndex = (currentImageIndex + 1) % allImages.length;
+    animateToImage(newIndex, 'right');
   };
 
   const prevImage = () => {
-    setCurrentImageIndex((prev) => (prev - 1 + allImages.length) % allImages.length);
+    if (allImages.length <= 1) return;
+    const newIndex = (currentImageIndex - 1 + allImages.length) % allImages.length;
+    animateToImage(newIndex, 'left');
   };
 
   const goToImage = (index: number) => {
-    setCurrentImageIndex(index);
+    if (index === currentImageIndex || isAnimating) return;
+    const direction = index > currentImageIndex ? 'right' : 'left';
+    animateToImage(index, direction);
   };
 
   const handleAddToCart = () => {
@@ -88,36 +148,48 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product, onBack }
             className="space-y-4"
           >
             {/* Main Image Display */}
-            <div className="relative aspect-square bg-white dark:bg-dark-card rounded-2xl overflow-hidden shadow-elegant dark:shadow-dark-elegant">
-              <AnimatePresence mode="wait">
-                <motion.img
-                  key={currentImageIndex}
-                  initial={{ opacity: 0, scale: 1.1 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.5 }}
-                  src={allImages[currentImageIndex]}
-                  alt={`${product.name} - Image ${currentImageIndex + 1}`}
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
-                  }}
-                />
-              </AnimatePresence>
+            <div 
+              ref={imageContainerRef}
+              className="relative aspect-square bg-white dark:bg-dark-card rounded-2xl overflow-hidden shadow-elegant dark:shadow-dark-elegant"
+            >
+              {/* Current Image */}
+              <img
+                ref={currentImageRef}
+                src={allImages[currentImageIndex]}
+                alt={`${product.name} - Image ${currentImageIndex + 1}`}
+                className="absolute inset-0 w-full h-full object-cover"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+                }}
+              />
+              
+              {/* Next Image (hidden by default, used for transitions) */}
+              <img
+                ref={nextImageRef}
+                alt="Next image"
+                className="absolute inset-0 w-full h-full object-cover opacity-0"
+                style={{ display: 'none' }}
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+                }}
+              />
               
               {/* Navigation Arrows */}
               {allImages.length > 1 && (
                 <>
                   <button
                     onClick={prevImage}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-white/80 dark:bg-dark-card/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-white dark:hover:bg-dark-card transition-colors"
+                    disabled={isAnimating}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-white/80 dark:bg-dark-card/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-white dark:hover:bg-dark-card transition-colors disabled:opacity-50 disabled:cursor-not-allowed z-10"
                   >
                     <ChevronLeft size={24} className="text-gray-700 dark:text-dark-text" />
                   </button>
                   <button
                     onClick={nextImage}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-white/80 dark:bg-dark-card/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-white dark:hover:bg-dark-card transition-colors"
+                    disabled={isAnimating}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-white/80 dark:bg-dark-card/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-white dark:hover:bg-dark-card transition-colors disabled:opacity-50 disabled:cursor-not-allowed z-10"
                   >
                     <ChevronRight size={24} className="text-gray-700 dark:text-dark-text" />
                   </button>
@@ -126,7 +198,7 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product, onBack }
 
               {/* Image Counter */}
               {allImages.length > 1 && (
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-3 py-1 bg-black/50 backdrop-blur-sm rounded-full">
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-3 py-1 bg-black/50 backdrop-blur-sm rounded-full z-10">
                   <span className="text-white text-sm">
                     {currentImageIndex + 1} / {allImages.length}
                   </span>
@@ -134,7 +206,7 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product, onBack }
               )}
 
               {/* Badges */}
-              <div className="absolute top-4 left-4 flex flex-col space-y-2">
+              <div className="absolute top-4 left-4 flex flex-col space-y-2 z-10">
                 {product.isNew && (
                   <div className="px-3 py-1 bg-purple-gradient rounded-full flex items-center justify-center">
                     <span className="text-xs text-white font-medium text-center">New</span>
@@ -157,11 +229,12 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product, onBack }
                   <button
                     key={index}
                     onClick={() => goToImage(index)}
+                    disabled={isAnimating}
                     className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
                       currentImageIndex === index
                         ? 'border-purple-500 dark:border-purple-400 shadow-lg'
                         : 'border-gray-200 dark:border-dark-accent hover:border-purple-300 dark:hover:border-purple-500'
-                    }`}
+                    } ${isAnimating ? 'opacity-50 cursor-not-allowed' : ''}`}
                   >
                     <img
                       src={image}

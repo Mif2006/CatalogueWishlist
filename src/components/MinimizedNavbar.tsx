@@ -38,9 +38,7 @@ const MinimizedNavbar: React.FC<MinimizedNavbarProps> = ({
                 animate={{ scale: 1, opacity: 1 }}
                 className="flex items-center space-x-3"
               >
-                <div className="h-8 w-8 rounded-full bg-purple-gradient flex items-center justify-center">
-                  <span className="text-white font-serif text-sm">L</span>
-                </div>
+             
                 <h1 className="text-lg font-serif text-jewelry-dark dark:text-dark-text">
                   ZaavG <span className="text-purple-500"></span>
                 </h1>

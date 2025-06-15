@@ -198,12 +198,7 @@ const Cart: React.FC = () => {
                             </p>
                             
                             {/* Stock warning */}
-                            {availableStock <= 5 && availableStock > 0 && (
-                              <p className="text-xs text-orange-500 dark:text-orange-400 mb-2">
-                                Only {availableStock} left in stock
-                              </p>
-                            )}
-                            
+                      
                             {isOutOfStock && (
                               <p className="text-xs text-red-500 dark:text-red-400 mb-2">
                                 Out of stock

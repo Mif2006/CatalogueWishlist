@@ -134,22 +134,35 @@ const Cart: React.FC = () => {
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 30, stiffness: 300 }}
               ref={cartRef}
-              className="fixed right-0 top-0 h-screen w-full max-w-[400px] bg-white dark:bg-dark-card shadow-2xl z-50 flex flex-col"
+              className="fixed right-0 top-0 h-screen w-full max-w-[400px] shadow-2xl z-50 flex flex-col"
+              style={{
+                background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.3) 100%)',
+                backdropFilter: 'blur(25px)',
+                WebkitBackdropFilter: 'blur(25px)',
+                boxShadow: '0 8px 32px rgba(139, 92, 246, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+                border: '1px solid rgba(255, 255, 255, 0.2)'
+              }}
             >
               {/* Header */}
-              <div className="px-6 py-4 border-b border-gray-100 dark:border-dark-accent flex justify-between items-center bg-white dark:bg-dark-card">
+              <div className="px-6 py-4 border-b border-white/20 flex justify-between items-center"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.4) 100%)',
+                  backdropFilter: 'blur(20px)',
+                  WebkitBackdropFilter: 'blur(20px)'
+                }}
+              >
                 <div className="flex items-center space-x-3">
-                  <ShoppingCart className="text-purple-500 dark:text-purple-400" size={24} />
-                  <h2 className="text-xl font-serif text-jewelry-dark dark:text-dark-text">
+                  <ShoppingCart className="text-purple-300" size={24} />
+                  <h2 className="text-xl font-serif text-white">
                     Shopping Cart {state.items.length > 0 && `(${state.items.length})`}
                   </h2>
                 </div>
                 <button
                   onClick={() => dispatch({ type: 'TOGGLE_CART' })}
-                  className="p-2 hover:bg-gray-100 dark:hover:bg-dark-accent rounded-full transition-colors"
+                  className="p-2 hover:bg-white/20 rounded-full transition-colors"
                   aria-label="Close cart"
                 >
-                  <X size={20} className="text-gray-500 dark:text-dark-muted" />
+                  <X size={20} className="text-gray-300" />
                 </button>
               </div>
 
@@ -172,124 +185,142 @@ const Cart: React.FC = () => {
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, scale: 0.95 }}
-                          className="relative flex space-x-4 bg-gray-50 dark:bg-dark-accent/30 p-4 rounded-xl border border-gray-100 dark:border-dark-accent"
+                          className={isPendingDelete ? 'opacity-50' : ''}
                         >
-                          <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-white dark:bg-dark-card shadow-md">
-                            <img
-                              src={item.imageUrl}
-                              alt={item.name}
-                              className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
-                            />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <h3 className="font-serif text-jewelry-dark dark:text-dark-text text-sm mb-1 truncate">
-                              {item.name}
-                            </h3>
-                            
-                            {/* Show selected size if available */}
-                            {item.selectedSize && (
-                              <p className="text-xs text-gray-600 dark:text-dark-muted mb-1">
-                                Size: {item.selectedSize}
+                          <motion.div
+                            className="relative flex space-x-4 p-4 rounded-xl border border-white/20"
+                            style={{
+                              background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 100%)',
+                              backdropFilter: 'blur(15px)',
+                              WebkitBackdropFilter: 'blur(15px)'
+                            }}
+                          >
+                            <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-black/30 shadow-md border border-white/10">
+                              <img
+                                src={item.imageUrl}
+                                alt={item.name}
+                                className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
+                              />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h3 className="font-serif text-white text-sm mb-1 truncate">
+                                {item.name}
+                              </h3>
+                              
+                              {/* Show selected size if available */}
+                              {item.selectedSize && (
+                                <p className="text-xs text-gray-300 mb-1">
+                                  Size: {item.selectedSize}
+                                </p>
+                              )}
+                              
+                              <p className="text-purple-300 font-medium text-lg mb-2">
+                                ₽{(item.price * item.quantity).toLocaleString()}
                               </p>
-                            )}
-                            
-                            <p className="text-purple-500 dark:text-purple-400 font-medium text-lg mb-2">
-                              ₽{(item.price * item.quantity).toLocaleString()}
-                            </p>
-                            
-                            {/* Stock warning */}
-                      
-                            {isOutOfStock && (
-                              <p className="text-xs text-red-500 dark:text-red-400 mb-2">
-                                Out of stock
-                              </p>
-                            )}
-                            
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center space-x-1 bg-white dark:bg-dark-card rounded-lg shadow-sm">
-                                <button
-                                  onClick={() => updateQuantity(itemKey, item.quantity - 1, availableStock)}
-                                  className="p-1.5 hover:bg-gray-100 dark:hover:bg-dark-accent rounded-lg transition-colors"
-                                  aria-label="Decrease quantity"
+                              
+                              {/* Stock warning */}
+                        
+                              {isOutOfStock && (
+                                <p className="text-xs text-red-400 mb-2">
+                                  Out of stock
+                                </p>
+                              )}
+                              
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center space-x-1 bg-black/40 backdrop-blur-md rounded-lg shadow-sm border border-white/20"
+                                  style={{
+                                    backdropFilter: 'blur(10px)',
+                                    WebkitBackdropFilter: 'blur(10px)'
+                                  }}
                                 >
-                                  <Minus size={14} className="text-gray-500 dark:text-dark-muted" />
-                                </button>
-                                <span className="w-8 text-center font-medium text-jewelry-dark dark:text-dark-text text-sm">
-                                  {item.quantity}
-                                </span>
+                                  <button
+                                    onClick={() => updateQuantity(itemKey, item.quantity - 1, availableStock)}
+                                    className="p-1.5 hover:bg-white/20 rounded-lg transition-colors"
+                                    aria-label="Decrease quantity"
+                                  >
+                                    <Minus size={14} className="text-gray-300" />
+                                  </button>
+                                  <span className="w-8 text-center font-medium text-white text-sm">
+                                    {item.quantity}
+                                  </span>
+                                  <button
+                                    onClick={() => updateQuantity(itemKey, item.quantity + 1, availableStock)}
+                                    disabled={item.quantity >= availableStock}
+                                    className="p-1.5 hover:bg-white/20 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                    aria-label="Increase quantity"
+                                  >
+                                    <Plus size={14} className="text-gray-300" />
+                                  </button>
+                                </div>
                                 <button
-                                  onClick={() => updateQuantity(itemKey, item.quantity + 1, availableStock)}
-                                  disabled={item.quantity >= availableStock}
-                                  className="p-1.5 hover:bg-gray-100 dark:hover:bg-dark-accent rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                                  aria-label="Increase quantity"
+                                  onClick={() => handleDeleteClick(itemKey)}
+                                  className="p-1.5 hover:bg-red-500/20 rounded-lg text-red-400 hover:text-red-300 transition-colors"
+                                  aria-label="Remove item"
                                 >
-                                  <Plus size={14} className="text-gray-500 dark:text-dark-muted" />
+                                  <Trash2 size={14} />
                                 </button>
                               </div>
-                              <button
-                                onClick={() => handleDeleteClick(itemKey)}
-                                className="p-1.5 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg text-red-500 hover:text-red-600 transition-colors"
-                                aria-label="Remove item"
-                              >
-                                <Trash2 size={14} />
-                              </button>
                             </div>
-                          </div>
 
-                          {/* Glassmorphism Delete Overlay */}
-                          <AnimatePresence>
-                            {isPendingDelete && (
-                              <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                className="absolute inset-0 bg-white/90 dark:bg-dark-card/90 backdrop-blur-sm rounded-xl flex flex-col items-center justify-center z-10 overflow-hidden"
-                              >
-                                <div className="text-center">
-                                  <p className="text-sm font-medium text-jewelry-dark dark:text-dark-text mb-4">
-                                    Are you sure you want to remove this item?
-                                  </p>
-                                  
-                                  {/* Red Circle Timer */}
-                                  <div className="relative w-16 h-16 mx-auto mb-4">
-                                    <svg className="w-16 h-16 transform -rotate-90" viewBox="0 0 64 64">
-                                      <motion.circle
-                                        cx="32"
-                                        cy="32"
-                                        r="28"
-                                        fill="currentColor"
-                                        className="text-red-500 dark:text-red-400"
-                                        initial={{ scale: 1 }}
-                                        animate={{ scale: 0 }}
-                                        transition={{ duration: 3, ease: "linear" }}
-                                      />
-                                    </svg>
-                                    <div className="absolute inset-0 flex items-center justify-center">
-                                      <Trash2 size={20} className="text-white" />
+                            {/* Glassmorphism Delete Overlay */}
+                            <AnimatePresence>
+                              {isPendingDelete && (
+                                <motion.div
+                                  initial={{ opacity: 0 }}
+                                  animate={{ opacity: 1 }}
+                                  exit={{ opacity: 0 }}
+                                  className="absolute inset-0 backdrop-blur-lg rounded-xl flex flex-col items-center justify-center z-10 overflow-hidden border border-white/30"
+                                  style={{
+                                    background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.6) 100%)',
+                                    backdropFilter: 'blur(20px)',
+                                    WebkitBackdropFilter: 'blur(20px)'
+                                  }}
+                                >
+                                  <div className="text-center">
+                                    <p className="text-sm font-medium text-white mb-4">
+                                      Are you sure you want to remove this item?
+                                    </p>
+                                    
+                                    {/* Red Circle Timer */}
+                                    <div className="relative w-16 h-16 mx-auto mb-4">
+                                      <svg className="w-16 h-16 transform -rotate-90" viewBox="0 0 64 64">
+                                        <motion.circle
+                                          cx="32"
+                                          cy="32"
+                                          r="28"
+                                          fill="rgba(239, 68, 68, 0.8)"
+                                          initial={{ scale: 1 }}
+                                          animate={{ scale: 0 }}
+                                          transition={{ duration: 3, ease: "linear" }}
+                                        />
+                                      </svg>
+                                      <div className="absolute inset-0 flex items-center justify-center">
+                                        <Trash2 size={20} className="text-white" />
+                                      </div>
                                     </div>
+                                    
+                                    <motion.button
+                                      whileHover={{ scale: 1.05 }}
+                                      whileTap={{ scale: 0.95 }}
+                                      onClick={() => handleUndoDelete(itemKey)}
+                                      className="px-4 py-2 bg-purple-gradient rounded-lg text-white font-medium text-sm hover:opacity-90 transition-opacity flex items-center space-x-2 shadow-lg"
+                                    >
+                                      <RotateCcw size={14} />
+                                      <span>Undo</span>
+                                    </motion.button>
                                   </div>
-                                  
-                                  <motion.button
-                                    whileHover={{ scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
-                                    onClick={() => handleUndoDelete(itemKey)}
-                                    className="px-4 py-2 bg-purple-gradient rounded-lg text-white font-medium text-sm hover:opacity-90 transition-opacity flex items-center space-x-2 shadow-lg"
-                                  >
-                                    <RotateCcw size={14} />
-                                    <span>Undo</span>
-                                  </motion.button>
-                                </div>
-                              </motion.div>
-                            )}
-                          </AnimatePresence>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </motion.div>
                         </motion.div>
                       );
                     })}
                     
                     {state.items.length === 0 && (
                       <div className="text-center py-12">
-                        <ShoppingCart size={64} className="mx-auto mb-4 text-gray-300 dark:text-dark-accent" />
-                        <p className="text-gray-500 dark:text-dark-muted text-lg">Your cart is empty</p>
+                        <ShoppingCart size={64} className="mx-auto mb-4 text-gray-400" />
+                        <p className="text-gray-300 text-lg">Your cart is empty</p>
                       </div>
                     )}
                   </div>
@@ -298,10 +329,16 @@ const Cart: React.FC = () => {
 
               {/* Footer */}
               {state.items.length > 0 && (
-                <div className="px-6 py-6 border-t border-gray-100 dark:border-dark-accent bg-white dark:bg-dark-card">
+                <div className="px-6 py-6 border-t border-white/20"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.4) 100%)',
+                    backdropFilter: 'blur(20px)',
+                    WebkitBackdropFilter: 'blur(20px)'
+                  }}
+                >
                   <div className="flex justify-between items-center mb-6">
-                    <span className="text-jewelry-dark dark:text-dark-text text-lg">Total</span>
-                    <span className="text-2xl font-serif text-purple-500 dark:text-purple-400">
+                    <span className="text-white text-lg">Total</span>
+                    <span className="text-2xl font-serif text-purple-300">
                       ₽{totalPrice.toLocaleString()}
                     </span>
                   </div>

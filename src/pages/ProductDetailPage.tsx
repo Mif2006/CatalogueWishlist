@@ -432,7 +432,6 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product, onBack }
         </div>
       </div>
     </div>
-    </div>
   );
 };
 

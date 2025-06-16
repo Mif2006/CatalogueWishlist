@@ -14,6 +14,20 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({ isOpen, onClose
   const { dispatch } = useCart();
   const [selectedSize, setSelectedSize] = useState<string>('');
   const [quantity, setQuantity] = useState(1);
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
 
   const handleAddToCart = () => {
     if (!selectedSize) {
@@ -47,21 +61,30 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({ isOpen, onClose
   return (
     <AnimatePresence>
       {isOpen && (
-        <>
+        <div className="fixed inset-0 z-[99999]" style={{ zIndex: 99999 }}>
+          {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 z-[9999] flex items-center justify-center p-4"
+            className="absolute inset-0 bg-black/70 backdrop-blur-sm"
             onClick={onClose}
-          >
+          />
+          
+          {/* Modal Container */}
+          <div className="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-              className="bg-white dark:bg-dark-card rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto relative z-[10000]"
+              ref={modalRef}
+              initial={{ scale: 0.8, opacity: 0, y: 50 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.8, opacity: 0, y: 50 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 400 }}
+              className="bg-white dark:bg-dark-card rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto pointer-events-auto"
               onClick={(e) => e.stopPropagation()}
+              style={{
+                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+                zIndex: 100000
+              }}
             >
               {/* Header */}
               <div className="p-6 border-b border-gray-100 dark:border-dark-accent">

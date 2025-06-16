@@ -136,9 +136,9 @@ const Cart: React.FC = () => {
               ref={cartRef}
               className="fixed right-0 top-0 h-screen w-full max-w-[400px] shadow-2xl z-50 flex flex-col"
               style={{
-                background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.3) 100%)',
-                backdropFilter: 'blur(25px)',
-                WebkitBackdropFilter: 'blur(25px)',
+                background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.9) 100%)',
+                backdropFilter: 'blur(5px)',
+                WebkitBackdropFilter: 'blur(5px)',
                 boxShadow: '0 8px 32px rgba(139, 92, 246, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
                 border: '1px solid rgba(255, 255, 255, 0.2)'
               }}
@@ -146,9 +146,9 @@ const Cart: React.FC = () => {
               {/* Header */}
               <div className="px-6 py-4 border-b border-white/20 flex justify-between items-center"
                 style={{
-                  background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.4) 100%)',
-                  backdropFilter: 'blur(20px)',
-                  WebkitBackdropFilter: 'blur(20px)'
+                  background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.98) 0%, rgba(0, 0, 0, 0.95) 100%)',
+                  backdropFilter: 'blur(3px)',
+                  WebkitBackdropFilter: 'blur(3px)'
                 }}
               >
                 <div className="flex items-center space-x-3">
@@ -190,9 +190,9 @@ const Cart: React.FC = () => {
                           <motion.div
                             className="relative flex space-x-4 p-4 rounded-xl border border-white/20"
                             style={{
-                              background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 100%)',
-                              backdropFilter: 'blur(15px)',
-                              WebkitBackdropFilter: 'blur(15px)'
+                              background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.8) 100%)',
+                              backdropFilter: 'blur(3px)',
+                              WebkitBackdropFilter: 'blur(3px)'
                             }}
                           >
                             <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-black/30 shadow-md border border-white/10">
@@ -229,8 +229,8 @@ const Cart: React.FC = () => {
                               <div className="flex items-center justify-between">
                                 <div className="flex items-center space-x-1 bg-black/40 backdrop-blur-md rounded-lg shadow-sm border border-white/20"
                                   style={{
-                                    backdropFilter: 'blur(10px)',
-                                    WebkitBackdropFilter: 'blur(10px)'
+                                    backdropFilter: 'blur(3px)',
+                                    WebkitBackdropFilter: 'blur(3px)'
                                   }}
                                 >
                                   <button
@@ -271,9 +271,9 @@ const Cart: React.FC = () => {
                                   exit={{ opacity: 0 }}
                                   className="absolute inset-0 backdrop-blur-lg rounded-xl flex flex-col items-center justify-center z-10 overflow-hidden border border-white/30"
                                   style={{
-                                    background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.6) 100%)',
-                                    backdropFilter: 'blur(20px)',
-                                    WebkitBackdropFilter: 'blur(20px)'
+                                    background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.9) 100%)',
+                                    backdropFilter: 'blur(5px)',
+                                    WebkitBackdropFilter: 'blur(5px)'
                                   }}
                                 >
                                   <div className="text-center">
@@ -331,9 +331,9 @@ const Cart: React.FC = () => {
               {state.items.length > 0 && (
                 <div className="px-6 py-6 border-t border-white/20"
                   style={{
-                    background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.4) 100%)',
-                    backdropFilter: 'blur(20px)',
-                    WebkitBackdropFilter: 'blur(20px)'
+                    background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.98) 0%, rgba(0, 0, 0, 0.95) 100%)',
+                    backdropFilter: 'blur(3px)',
+                    WebkitBackdropFilter: 'blur(3px)'
                   }}
                 >
                   <div className="flex justify-between items-center mb-6">

@@ -50,12 +50,12 @@ const Catalog: React.FC<CatalogProps> = ({ items, onItemClick }) => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: index * 0.1 }}
-          className="bg-white/40 dark:bg-dark-card/40 backdrop-blur-xl border border-white/30 dark:border-white/10 rounded-2xl shadow-lg hover:shadow-2xl overflow-hidden group cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:border-purple-300/50 dark:hover:border-purple-400/30"
+          className="bg-black/40 dark:bg-black/40 backdrop-blur-xl border border-white/20 dark:border-white/20 rounded-2xl shadow-lg hover:shadow-2xl overflow-hidden group cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:border-purple-400/60 dark:hover:border-purple-400/60"
           onClick={() => onItemClick(item)}
           style={{
             backdropFilter: 'blur(20px)',
             WebkitBackdropFilter: 'blur(20px)',
-            boxShadow: '0 8px 32px rgba(139, 92, 246, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+            boxShadow: '0 8px 32px rgba(139, 92, 246, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
           }}
         >
           <div className="relative aspect-square overflow-hidden cursor-pointer" onClick={() => onItemClick(item)}>
@@ -65,8 +65,8 @@ const Catalog: React.FC<CatalogProps> = ({ items, onItemClick }) => {
               </div>
             )}
             {item.collection && (
-              <div className="absolute top-2 right-2 z-10 px-2 py-1 bg-white/95 dark:bg-dark-card/90 backdrop-blur-sm rounded-full shadow-sm border border-gray-200/50 dark:border-dark-accent">
-                <span className="text-xs text-purple-500 dark:text-purple-400 font-medium capitalize">{item.collection}</span>
+              <div className="absolute top-2 right-2 z-10 px-2 py-1 bg-black/70 dark:bg-black/70 backdrop-blur-sm rounded-full shadow-sm border border-white/20 dark:border-white/20">
+                <span className="text-xs text-purple-300 dark:text-purple-300 font-medium capitalize">{item.collection}</span>
               </div>
             )}
             <img
@@ -80,7 +80,7 @@ const Catalog: React.FC<CatalogProps> = ({ items, onItemClick }) => {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             <div className="absolute bottom-4 right-4 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <button className="p-2 bg-white/95 dark:bg-dark-card/90 backdrop-blur-sm rounded-full text-purple-500 hover:text-purple-600 dark:text-purple-400 dark:hover:text-purple-300 transition-colors shadow-lg border border-gray-200/50 dark:border-dark-accent">
+              <button className="p-2 bg-black/70 dark:bg-black/70 backdrop-blur-sm rounded-full text-purple-300 hover:text-purple-200 dark:text-purple-300 dark:hover:text-purple-200 transition-colors shadow-lg border border-white/20 dark:border-white/20">
                 <Share2 size={18} />
               </button>
               <button 
@@ -88,7 +88,7 @@ const Catalog: React.FC<CatalogProps> = ({ items, onItemClick }) => {
                   e.stopPropagation();
                   toggleWishlist(item);
                 }}
-                className="p-2 bg-white/95 dark:bg-dark-card/90 backdrop-blur-sm rounded-full transition-colors shadow-lg border border-gray-200/50 dark:border-dark-accent"
+                className="p-2 bg-black/70 dark:bg-black/70 backdrop-blur-sm rounded-full transition-colors shadow-lg border border-white/20 dark:border-white/20"
               >
                 <Heart 
                   size={18} 
@@ -100,24 +100,24 @@ const Catalog: React.FC<CatalogProps> = ({ items, onItemClick }) => {
               </button>
             </div>
           </div>
-          <div className="p-4 bg-gradient-to-b from-white/60 to-white/30 dark:from-dark-card/60 dark:to-dark-card/30 backdrop-blur-sm">
+          <div className="p-4 bg-gradient-to-b from-black/50 to-black/30 dark:from-black/50 dark:to-black/30 backdrop-blur-sm">
             <div className="flex justify-between items-start mb-3">
-              <h3 className="text-sm font-serif text-gray-900 dark:text-dark-text line-clamp-2 font-medium">{item.name}</h3>
-              <p className="text-lg font-serif text-purple-600 dark:text-purple-300 whitespace-nowrap ml-2 font-semibold">
+              <h3 className="text-sm font-serif text-white dark:text-white line-clamp-2 font-medium">{item.name}</h3>
+              <p className="text-lg font-serif text-purple-300 dark:text-purple-300 whitespace-nowrap ml-2 font-semibold">
                 ₽{item.price.toLocaleString()}
               </p>
             </div>
             
-            <p className="text-xs text-gray-700 dark:text-dark-muted mb-4 line-clamp-2 leading-relaxed">{item.description}</p>
+            <p className="text-xs text-gray-300 dark:text-gray-300 mb-4 line-clamp-2 leading-relaxed">{item.description}</p>
             <div className="flex space-x-2">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => onItemClick(item)}
-                className="flex-1 px-3 py-2 bg-white/50 dark:bg-dark-accent/50 backdrop-blur-md border-2 border-purple-500/70 dark:border-purple-400/70 rounded-lg text-purple-700 dark:text-purple-300 font-medium text-xs hover:bg-purple-100/60 dark:hover:bg-purple-900/30 transition-all duration-200 flex items-center justify-center space-x-1 shadow-sm hover:shadow-md"
+                className="flex-1 px-3 py-2 bg-black/50 dark:bg-black/50 backdrop-blur-md border-2 border-purple-400/70 dark:border-purple-400/70 rounded-lg text-purple-200 dark:text-purple-200 font-medium text-xs hover:bg-purple-900/40 dark:hover:bg-purple-900/40 transition-all duration-200 flex items-center justify-center space-x-1 shadow-sm hover:shadow-md"
                 style={{
-                  backdropFilter: 'blur(10px)',
-                  WebkitBackdropFilter: 'blur(10px)'
+                  backdropFilter: 'blur(15px)',
+                  WebkitBackdropFilter: 'blur(15px)'
                 }}
               >
                 <span>Learn More</span>

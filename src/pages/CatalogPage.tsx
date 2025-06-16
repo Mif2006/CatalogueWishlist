@@ -172,15 +172,15 @@ const CatalogPage: React.FC = () => {
         transition={{ duration: 0.6, delay: 0.2 }}
         className="bg-white/20 dark:bg-dark-card/20 backdrop-blur-xl border border-white/30 dark:border-white/10 shadow-2xl rounded-2xl p-4 md:p-6 mb-8"
         style={{
-          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.1) 100%)',
+          background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 100%)',
           backdropFilter: 'blur(20px)',
           WebkitBackdropFilter: 'blur(20px)',
-          boxShadow: '0 8px 32px rgba(139, 92, 246, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+          boxShadow: '0 8px 32px rgba(139, 92, 246, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
         }}
       >
         <div className="flex items-center justify-between mb-6">
           <div className="flex-1">
-            <h2 className="text-xl font-serif text-jewelry-dark dark:text-dark-text">
+            <h2 className="text-xl font-serif text-white dark:text-white">
               {searchQuery 
                 ? `Search Results`
                 : activeCollection 
@@ -189,22 +189,22 @@ const CatalogPage: React.FC = () => {
                     ? 'All Items' 
                     : categories.find(c => c.id === activeCategory)?.name || 'Items'
               }
-              <span className="text-sm text-gray-500 dark:text-dark-muted ml-2">
+              <span className="text-sm text-gray-300 dark:text-gray-300 ml-2">
                 ({filteredItems.length} items)
               </span>
             </h2>
             {searchQuery && (
-              <p className="text-sm text-gray-500 dark:text-dark-muted mt-1">
+              <p className="text-sm text-gray-300 dark:text-gray-300 mt-1">
                 Searching for "{searchQuery}"
               </p>
             )}
           </div>
           <button
             onClick={refetch}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-dark-accent rounded-full transition-colors"
+            className="p-2 hover:bg-white/20 dark:hover:bg-white/20 rounded-full transition-colors"
             title="Refresh catalog"
           >
-            <RefreshCw className="w-4 h-4 text-gray-500 dark:text-dark-muted" />
+            <RefreshCw className="w-4 h-4 text-white dark:text-white" />
           </button>
         </div>
         
@@ -212,17 +212,17 @@ const CatalogPage: React.FC = () => {
         <div className="mb-6">
           <div className="relative max-w-md">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search className="h-5 w-5 text-gray-400 dark:text-dark-muted" />
+              <Search className="h-5 w-5 text-gray-300 dark:text-gray-300" />
             </div>
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search products..."
-              className="block w-full pl-10 pr-10 py-3 border border-white/30 dark:border-white/10 rounded-xl bg-white/30 dark:bg-dark-accent/30 backdrop-blur-md text-jewelry-dark dark:text-dark-text placeholder-gray-600 dark:placeholder-dark-muted focus:outline-none focus:ring-2 focus:ring-purple-500/30 dark:focus:ring-purple-400/30 focus:border-purple-500/50 dark:focus:border-purple-400/50 transition-all"
+              className="block w-full pl-10 pr-10 py-3 border border-white/20 dark:border-white/20 rounded-xl bg-black/30 dark:bg-black/30 backdrop-blur-md text-white dark:text-white placeholder-gray-300 dark:placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-400/50 dark:focus:ring-purple-400/50 focus:border-purple-400/70 dark:focus:border-purple-400/70 transition-all"
               style={{
-                backdropFilter: 'blur(10px)',
-                WebkitBackdropFilter: 'blur(10px)'
+                backdropFilter: 'blur(15px)',
+                WebkitBackdropFilter: 'blur(15px)'
               }}
             />
             {searchQuery && (
@@ -230,7 +230,7 @@ const CatalogPage: React.FC = () => {
                 onClick={clearSearch}
                 className="absolute inset-y-0 right-0 pr-3 flex items-center hover:text-purple-500 dark:hover:text-purple-400 transition-colors"
               >
-                <X className="h-5 w-5 text-gray-400 dark:text-dark-muted" />
+                <X className="h-5 w-5 text-gray-300 dark:text-gray-300" />
               </button>
             )}
           </div>
@@ -239,35 +239,35 @@ const CatalogPage: React.FC = () => {
         {/* Active Filters */}
         {(activeCategory !== 'all' || activeCollection || searchQuery) && (
           <div className="flex items-center gap-2 mb-4">
-            <span className="text-sm text-gray-600 dark:text-dark-muted">Active filters:</span>
+            <span className="text-sm text-gray-300 dark:text-gray-300">Active filters:</span>
             {searchQuery && (
-              <span className="px-3 py-1 bg-green-500/20 backdrop-blur-md border border-green-300/30 text-green-800 dark:text-green-200 rounded-full text-xs font-medium flex items-center gap-1">
+              <span className="px-3 py-1 bg-green-500/30 backdrop-blur-md border border-green-400/40 text-green-200 dark:text-green-200 rounded-full text-xs font-medium flex items-center gap-1">
                 Search: "{searchQuery.length > 20 ? searchQuery.substring(0, 20) + '...' : searchQuery}"
                 <button
                   onClick={clearSearch}
-                  className="ml-1 hover:bg-green-400/30 rounded-full p-0.5 transition-colors"
+                  className="ml-1 hover:bg-green-400/40 rounded-full p-0.5 transition-colors"
                 >
                   ×
                 </button>
               </span>
             )}
             {activeCategory !== 'all' && (
-              <span className="px-3 py-1 bg-purple-500/20 backdrop-blur-md border border-purple-300/30 text-purple-800 dark:text-purple-200 rounded-full text-xs font-medium flex items-center gap-1">
+              <span className="px-3 py-1 bg-purple-500/30 backdrop-blur-md border border-purple-400/40 text-purple-200 dark:text-purple-200 rounded-full text-xs font-medium flex items-center gap-1">
                 {categories.find(c => c.id === activeCategory)?.name || activeCategory}
                 <button
                   onClick={() => setActiveCategory('all')}
-                  className="ml-1 hover:bg-purple-400/30 rounded-full p-0.5 transition-colors"
+                  className="ml-1 hover:bg-purple-400/40 rounded-full p-0.5 transition-colors"
                 >
                   ×
                 </button>
               </span>
             )}
             {activeCollection && (
-              <span className="px-3 py-1 bg-blue-500/20 backdrop-blur-md border border-blue-300/30 text-blue-800 dark:text-blue-200 rounded-full text-xs font-medium flex items-center gap-1">
+              <span className="px-3 py-1 bg-blue-500/30 backdrop-blur-md border border-blue-400/40 text-blue-200 dark:text-blue-200 rounded-full text-xs font-medium flex items-center gap-1">
                 {activeCollection}
                 <button
                   onClick={() => setActiveCollection(null)}
-                  className="ml-1 hover:bg-blue-400/30 rounded-full p-0.5 transition-colors"
+                  className="ml-1 hover:bg-blue-400/40 rounded-full p-0.5 transition-colors"
                 >
                   ×
                 </button>
@@ -275,7 +275,7 @@ const CatalogPage: React.FC = () => {
             )}
             <button
               onClick={clearFilters}
-              className="text-xs text-gray-500 dark:text-dark-muted hover:text-purple-500 dark:hover:text-purple-400 underline"
+              className="text-xs text-gray-300 dark:text-gray-300 hover:text-purple-300 dark:hover:text-purple-300 underline"
             >
               Clear all
             </button>
@@ -288,11 +288,11 @@ const CatalogPage: React.FC = () => {
             className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
               activeCategory === 'all' && !activeCollection
                 ? 'bg-purple-gradient text-white'
-                : 'bg-white/30 dark:bg-dark-accent/30 backdrop-blur-md border border-white/20 dark:border-white/10 text-gray-700 dark:text-dark-text hover:bg-white/40 dark:hover:bg-dark-accent/40'
+                : 'bg-black/30 dark:bg-black/30 backdrop-blur-md border border-white/20 dark:border-white/20 text-white dark:text-white hover:bg-black/40 dark:hover:bg-black/40'
             }`}
             style={activeCategory !== 'all' || activeCollection ? {
-              backdropFilter: 'blur(10px)',
-              WebkitBackdropFilter: 'blur(10px)'
+              backdropFilter: 'blur(15px)',
+              WebkitBackdropFilter: 'blur(15px)'
             } : {}}
           >
             All
@@ -304,11 +304,11 @@ const CatalogPage: React.FC = () => {
               className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                 activeCategory === category.id
                   ? 'bg-purple-gradient text-white'
-                  : 'bg-white/30 dark:bg-dark-accent/30 backdrop-blur-md border border-white/20 dark:border-white/10 text-gray-700 dark:text-dark-text hover:bg-white/40 dark:hover:bg-dark-accent/40'
+                  : 'bg-black/30 dark:bg-black/30 backdrop-blur-md border border-white/20 dark:border-white/20 text-white dark:text-white hover:bg-black/40 dark:hover:bg-black/40'
               }`}
               style={activeCategory !== category.id ? {
-                backdropFilter: 'blur(10px)',
-                WebkitBackdropFilter: 'blur(10px)'
+                backdropFilter: 'blur(15px)',
+                WebkitBackdropFilter: 'blur(15px)'
               } : {}}
             >
               {category.name}
@@ -318,7 +318,7 @@ const CatalogPage: React.FC = () => {
         
         {collections.length > 0 && (
           <div className="mb-6">
-            <h3 className="text-sm font-medium text-gray-700 dark:text-dark-text mb-2">Collections:</h3>
+            <h3 className="text-sm font-medium text-white dark:text-white mb-2">Collections:</h3>
             <div className="flex flex-wrap gap-2">
               {collections.map(collection => (
                 <button 
@@ -327,11 +327,11 @@ const CatalogPage: React.FC = () => {
                   className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
                     activeCollection === collection
                       ? 'bg-blue-500 text-white'
-                      : 'bg-purple-500/20 backdrop-blur-md border border-purple-300/30 text-purple-800 dark:text-purple-200 hover:bg-purple-500/30'
+                      : 'bg-purple-500/30 backdrop-blur-md border border-purple-400/40 text-purple-200 dark:text-purple-200 hover:bg-purple-500/40'
                   }`}
                   style={activeCollection !== collection ? {
-                    backdropFilter: 'blur(10px)',
-                    WebkitBackdropFilter: 'blur(10px)'
+                    backdropFilter: 'blur(15px)',
+                    WebkitBackdropFilter: 'blur(15px)'
                   } : {}}
                 >
                   {collection}

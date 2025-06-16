@@ -5,6 +5,7 @@ import { gsap } from 'gsap';
 import { useCart } from '../context/CartContext';
 import SizeButton from '../components/SizeButton';
 import type { CatalogItem } from '../hooks/useCatalogData';
+import backgroundImage from '../assets/purple2.jpeg';
 
 interface ProductDetailPageProps {
   product: CatalogItem;
@@ -126,20 +127,36 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product, onBack }
   const selectedSizeStock = selectedSize ? product.sizes[selectedSize] || 0 : 0;
 
   return (
-    <div className="min-h-screen bg-jewelry-cream dark:bg-dark-bg">
+    <div className="min-h-screen relative">
+      {/* Background Image */}
+      <div 
+        className="fixed inset-0 z-0"
+        style={{
+          backgroundImage: `url(${backgroundImage})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          backgroundAttachment: 'fixed'
+        }}
+      >
+        {/* Overlay for better readability */}
+        <div className="absolute inset-0 bg-white/60 dark:bg-dark-bg/60 backdrop-blur-[2px]"></div>
+      </div>
+      
+      {/* Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Back Button */}
         <motion.button
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           onClick={onBack}
-          className="flex items-center space-x-2 text-gray-600 dark:text-dark-muted hover:text-purple-500 dark:hover:text-purple-400 transition-colors mb-8"
+          className="relative z-10 flex items-center space-x-2 text-gray-600 dark:text-dark-muted hover:text-purple-500 dark:hover:text-purple-400 transition-colors mb-8"
         >
           <ArrowLeft size={20} />
           <span>Back to Catalog</span>
         </motion.button>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Image Carousel - Left Side */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
@@ -150,7 +167,10 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product, onBack }
             {/* Main Image Display */}
             <div 
               ref={imageContainerRef}
-              className="relative aspect-square bg-white dark:bg-dark-card rounded-2xl overflow-hidden shadow-elegant dark:shadow-dark-elegant"
+              className="relative aspect-square bg-white dark:bg-dark-card rounded-2xl overflow-hidden shadow-elegant dark:shadow-dark-elegant border-2 border-purple-300/60 dark:border-purple-400/60"
+              style={{
+                boxShadow: '0 8px 32px rgba(139, 92, 246, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
+              }}
             >
               {/* Current Image */}
               <img
@@ -233,7 +253,7 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product, onBack }
                     className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
                       currentImageIndex === index
                         ? 'border-purple-500 dark:border-purple-400 shadow-lg'
-                        : 'border-gray-200 dark:border-dark-accent hover:border-purple-300 dark:hover:border-purple-500'
+                        : 'border-purple-200/60 dark:border-purple-400/40 hover:border-purple-400/80 dark:hover:border-purple-400/80'
                     } ${isAnimating ? 'opacity-50 cursor-not-allowed' : ''}`}
                   >
                     <img
@@ -379,7 +399,13 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product, onBack }
             </div>
 
             {/* Product Features */}
-            <div className="bg-white dark:bg-dark-card rounded-xl p-6 shadow-elegant dark:shadow-dark-elegant">
+            <div className="bg-white/80 dark:bg-dark-card/80 backdrop-blur-xl border border-white/30 dark:border-white/10 rounded-xl p-6 shadow-elegant dark:shadow-dark-elegant"
+              style={{
+                backdropFilter: 'blur(20px)',
+                WebkitBackdropFilter: 'blur(20px)',
+                boxShadow: '0 8px 32px rgba(139, 92, 246, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
+              }}
+            >
               <h3 className="text-lg font-medium text-jewelry-dark dark:text-dark-text mb-4">
                 Product Features
               </h3>
@@ -405,6 +431,7 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product, onBack }
           </motion.div>
         </div>
       </div>
+    </div>
     </div>
   );
 };

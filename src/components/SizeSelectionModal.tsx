@@ -223,7 +223,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({ isOpen, onClose
               </div>
             </motion.div>
           </motion.div>
-        </>
+        </div>
       )}
     </AnimatePresence>
   );

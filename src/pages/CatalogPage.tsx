@@ -5,7 +5,6 @@ import Catalog from '../components/Catalog';
 import ProductDetailPage from './ProductDetailPage';
 import { useCatalogData } from '../hooks/useCatalogData';
 import type { CatalogItem } from '../hooks/useCatalogData';
-import backgroundImage from '../assets/purple2.jpeg';
 
 const categories = [
   { id: 'new', name: 'New Arrivals' },
@@ -139,7 +138,7 @@ const CatalogPage: React.FC = () => {
       <div 
         className="fixed inset-0 z-0"
         style={{
-          backgroundImage: `url(${backgroundImage})`,
+          backgroundImage: 'url(https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-4.0.3&auto=format&fit=crop&w=2074&q=80)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',

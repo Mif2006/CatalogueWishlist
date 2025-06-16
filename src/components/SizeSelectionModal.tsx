@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ShoppingCart, Package } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import SizeButton from './SizeButton';
 import type { CatalogItem } from '../hooks/useCatalogData';
 
 interface SizeSelectionModalProps {
@@ -14,20 +15,6 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({ isOpen, onClose
   const { dispatch } = useCart();
   const [selectedSize, setSelectedSize] = useState<string>('');
   const [quantity, setQuantity] = useState(1);
-  const modalRef = useRef<HTMLDivElement>(null);
-
-  // Prevent body scroll when modal is open
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [isOpen]);
 
   const handleAddToCart = () => {
     if (!selectedSize) {
@@ -61,30 +48,21 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({ isOpen, onClose
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[99999]" style={{ zIndex: 99999 }}>
-          {/* Backdrop */}
+        <>
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+            className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
             onClick={onClose}
-          />
-          
-          {/* Modal Container */}
-          <div className="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+          >
             <motion.div
-              ref={modalRef}
-              initial={{ scale: 0.8, opacity: 0, y: 50 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.8, opacity: 0, y: 50 }}
-              transition={{ type: 'spring', damping: 25, stiffness: 400 }}
-              className="bg-white dark:bg-dark-card rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto pointer-events-auto"
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: 'spring', damping: 20, stiffness: 300 }}
+              className="bg-white dark:bg-dark-card rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto"
               onClick={(e) => e.stopPropagation()}
-              style={{
-                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1)',
-                zIndex: 100000
-              }}
             >
               {/* Header */}
               <div className="p-6 border-b border-gray-100 dark:border-dark-accent">
@@ -142,29 +120,13 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({ isOpen, onClose
                     </h3>
                     <div className="grid grid-cols-2 gap-3 mb-6">
                       {Object.entries(product.sizes).map(([size, stock]) => (
-                        <button
+                        <SizeButton
                           key={size}
-                          onClick={() => setSelectedSize(size)}
-                          disabled={stock === 0}
-                          className={`p-4 rounded-lg border-2 text-center transition-all relative overflow-hidden h-20 ${
-                            selectedSize === size
-                              ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400'
-                              : stock > 0
-                              ? 'border-gray-200 dark:border-dark-accent hover:border-purple-300 dark:hover:border-purple-500 text-jewelry-dark dark:text-dark-text'
-                              : 'border-gray-200 dark:border-dark-accent bg-gray-50 dark:bg-dark-accent text-gray-400 dark:text-dark-muted cursor-not-allowed opacity-50'
-                          }`}
-                        >
-                          <div className="text-xl font-bold">
-                            {size}
-                          </div>
-                          <div className="text-xs font-medium mt-1">
-                            {stock > 0 ? (
-                              <span className="text-green-600 dark:text-green-400">{stock} left</span>
-                            ) : (
-                              <span className="text-red-500 dark:text-red-400">Out of stock</span>
-                            )}
-                          </div>
-                        </button>
+                          size={size}
+                          stock={stock}
+                          isSelected={selectedSize === size}
+                          onSelect={() => setSelectedSize(size)}
+                        />
                       ))}
                     </div>
 
@@ -222,8 +184,8 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({ isOpen, onClose
                 )}
               </div>
             </motion.div>
-          </div>
-        </div>
+          </motion.div>
+        </>
       )}
     </AnimatePresence>
   );

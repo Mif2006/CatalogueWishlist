@@ -65,16 +65,12 @@ const SizeButton: React.FC<SizeButtonProps> = ({
       });
     };
 
-    if (buttonElement) {
-      buttonElement.addEventListener('mouseenter', handleMouseEnter);
-      buttonElement.addEventListener('mouseleave', handleMouseLeave);
-    }
+    buttonElement.addEventListener('mouseenter', handleMouseEnter);
+    buttonElement.addEventListener('mouseleave', handleMouseLeave);
 
     return () => {
-      if (buttonElement) {
-        buttonElement.removeEventListener('mouseenter', handleMouseEnter);
-        buttonElement.removeEventListener('mouseleave', handleMouseLeave);
-      }
+      buttonElement.removeEventListener('mouseenter', handleMouseEnter);
+      buttonElement.removeEventListener('mouseleave', handleMouseLeave);
     };
   }, []);
 

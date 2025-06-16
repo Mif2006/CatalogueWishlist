@@ -134,28 +134,10 @@ const Cart: React.FC = () => {
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 30, stiffness: 300 }}
               ref={cartRef}
-              className="fixed right-0 top-0 h-screen w-full max-w-[400px] shadow-2xl z-50 flex flex-col relative overflow-hidden"
+              className="fixed right-0 top-0 h-screen w-full max-w-[400px] bg-white dark:bg-dark-card shadow-2xl z-50 flex flex-col"
             >
-              {/* Gradient Background */}
-              <div className="absolute inset-0 bg-gradient-to-br from-gray-300 via-gray-400 to-gray-500 dark:from-gray-700 dark:via-gray-800 dark:to-gray-900"></div>
-              
-              {/* Animated gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 via-transparent to-indigo-500/20 animate-pulse"></div>
-              
-              {/* Subtle geometric pattern */}
-              <div className="absolute inset-0 opacity-10">
-                <div className="absolute top-4 right-4 w-20 h-20 border border-white/30 rounded-full"></div>
-                <div className="absolute bottom-4 left-4 w-16 h-16 border border-white/20 rounded-lg rotate-45"></div>
-                <div className="absolute top-1/2 left-1/4 w-12 h-12 bg-white/10 rounded-full blur-sm"></div>
-                <div className="absolute top-1/3 right-1/3 w-8 h-8 bg-white/5 rounded-full"></div>
-                <div className="absolute bottom-1/3 right-1/4 w-6 h-6 border border-white/20 rounded-sm rotate-12"></div>
-              </div>
-              
-              {/* Content overlay with backdrop */}
-              <div className="absolute inset-0 bg-white/95 dark:bg-dark-card/95 backdrop-blur-sm"></div>
-              
               {/* Header */}
-              <div className="relative z-10 px-6 py-4 border-b border-gray-100/50 dark:border-dark-accent/50 flex justify-between items-center">
+              <div className="px-6 py-4 border-b border-gray-100 dark:border-dark-accent flex justify-between items-center bg-white dark:bg-dark-card">
                 <div className="flex items-center space-x-3">
                   <ShoppingCart className="text-purple-500 dark:text-purple-400" size={24} />
                   <h2 className="text-xl font-serif text-jewelry-dark dark:text-dark-text">
@@ -172,7 +154,7 @@ const Cart: React.FC = () => {
               </div>
 
               {/* Scrollable Content */}
-              <div className="relative z-10 flex-1 overflow-y-auto">
+              <div className="flex-1 overflow-y-auto">
                 <div className="px-6 py-6">
                   <div className="space-y-4">
                     {state.items.map(item => {
@@ -316,14 +298,14 @@ const Cart: React.FC = () => {
 
               {/* Footer */}
               {state.items.length > 0 && (
-                <div className="relative z-10 px-6 py-6 border-t border-gray-100/50 dark:border-dark-accent/50">
+                <div className="px-6 py-6 border-t border-gray-100 dark:border-dark-accent bg-white dark:bg-dark-card">
                   <div className="flex justify-between items-center mb-6">
                     <span className="text-jewelry-dark dark:text-dark-text text-lg">Total</span>
                     <span className="text-2xl font-serif text-purple-500 dark:text-purple-400">
                       ₽{totalPrice.toLocaleString()}
                     </span>
                   </div>
-                  <button className="w-full py-4 bg-purple-gradient rounded-xl text-white font-medium text-lg hover:opacity-90 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02]">
+                  <button className="w-full py-4 bg-purple-gradient rounded-xl text-white font-medium text-lg hover:opacity-90 transition-opacity shadow-lg hover:shadow-xl">
                     Proceed to Checkout
                   </button>
                 </div>

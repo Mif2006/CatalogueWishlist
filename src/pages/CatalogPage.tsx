@@ -147,7 +147,7 @@ const CatalogPage: React.FC = () => {
         }}
       >
         {/* Overlay for better readability */}
-        <div className="absolute inset-0 bg-white/85 dark:bg-dark-bg/85 backdrop-blur-sm"></div>
+        <div className="absolute inset-0 bg-white/60 dark:bg-dark-bg/60 backdrop-blur-[2px]"></div>
       </div>
       
       {/* Content */}
@@ -170,7 +170,13 @@ const CatalogPage: React.FC = () => {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.2 }}
-        className="bg-white dark:bg-dark-card shadow-elegant dark:shadow-dark-elegant rounded-2xl p-4 md:p-6 mb-8"
+        className="bg-white/20 dark:bg-dark-card/20 backdrop-blur-xl border border-white/30 dark:border-white/10 shadow-2xl rounded-2xl p-4 md:p-6 mb-8"
+        style={{
+          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.1) 100%)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          boxShadow: '0 8px 32px rgba(139, 92, 246, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+        }}
       >
         <div className="flex items-center justify-between mb-6">
           <div className="flex-1">
@@ -213,7 +219,11 @@ const CatalogPage: React.FC = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search products..."
-              className="block w-full pl-10 pr-10 py-3 border border-gray-200 dark:border-dark-accent rounded-xl bg-white dark:bg-dark-accent text-jewelry-dark dark:text-dark-text placeholder-gray-400 dark:placeholder-dark-muted focus:outline-none focus:ring-2 focus:ring-purple-500/20 dark:focus:ring-purple-400/20 focus:border-purple-500 dark:focus:border-purple-400 transition-colors"
+              className="block w-full pl-10 pr-10 py-3 border border-white/30 dark:border-white/10 rounded-xl bg-white/30 dark:bg-dark-accent/30 backdrop-blur-md text-jewelry-dark dark:text-dark-text placeholder-gray-600 dark:placeholder-dark-muted focus:outline-none focus:ring-2 focus:ring-purple-500/30 dark:focus:ring-purple-400/30 focus:border-purple-500/50 dark:focus:border-purple-400/50 transition-all"
+              style={{
+                backdropFilter: 'blur(10px)',
+                WebkitBackdropFilter: 'blur(10px)'
+              }}
             />
             {searchQuery && (
               <button
@@ -231,33 +241,33 @@ const CatalogPage: React.FC = () => {
           <div className="flex items-center gap-2 mb-4">
             <span className="text-sm text-gray-600 dark:text-dark-muted">Active filters:</span>
             {searchQuery && (
-              <span className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-full text-xs font-medium flex items-center gap-1">
+              <span className="px-3 py-1 bg-green-500/20 backdrop-blur-md border border-green-300/30 text-green-800 dark:text-green-200 rounded-full text-xs font-medium flex items-center gap-1">
                 Search: "{searchQuery.length > 20 ? searchQuery.substring(0, 20) + '...' : searchQuery}"
                 <button
                   onClick={clearSearch}
-                  className="ml-1 hover:bg-green-200 dark:hover:bg-green-800 rounded-full p-0.5"
+                  className="ml-1 hover:bg-green-400/30 rounded-full p-0.5 transition-colors"
                 >
                   ×
                 </button>
               </span>
             )}
             {activeCategory !== 'all' && (
-              <span className="px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-full text-xs font-medium flex items-center gap-1">
+              <span className="px-3 py-1 bg-purple-500/20 backdrop-blur-md border border-purple-300/30 text-purple-800 dark:text-purple-200 rounded-full text-xs font-medium flex items-center gap-1">
                 {categories.find(c => c.id === activeCategory)?.name || activeCategory}
                 <button
                   onClick={() => setActiveCategory('all')}
-                  className="ml-1 hover:bg-purple-200 dark:hover:bg-purple-800 rounded-full p-0.5"
+                  className="ml-1 hover:bg-purple-400/30 rounded-full p-0.5 transition-colors"
                 >
                   ×
                 </button>
               </span>
             )}
             {activeCollection && (
-              <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-xs font-medium flex items-center gap-1">
+              <span className="px-3 py-1 bg-blue-500/20 backdrop-blur-md border border-blue-300/30 text-blue-800 dark:text-blue-200 rounded-full text-xs font-medium flex items-center gap-1">
                 {activeCollection}
                 <button
                   onClick={() => setActiveCollection(null)}
-                  className="ml-1 hover:bg-blue-200 dark:hover:bg-blue-800 rounded-full p-0.5"
+                  className="ml-1 hover:bg-blue-400/30 rounded-full p-0.5 transition-colors"
                 >
                   ×
                 </button>
@@ -278,8 +288,12 @@ const CatalogPage: React.FC = () => {
             className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
               activeCategory === 'all' && !activeCollection
                 ? 'bg-purple-gradient text-white'
-                : 'bg-gray-100 dark:bg-dark-accent text-gray-600 dark:text-dark-muted hover:bg-gray-200 dark:hover:bg-dark-accent/70'
+                : 'bg-white/30 dark:bg-dark-accent/30 backdrop-blur-md border border-white/20 dark:border-white/10 text-gray-700 dark:text-dark-text hover:bg-white/40 dark:hover:bg-dark-accent/40'
             }`}
+            style={activeCategory !== 'all' || activeCollection ? {
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)'
+            } : {}}
           >
             All
           </button>
@@ -290,8 +304,12 @@ const CatalogPage: React.FC = () => {
               className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                 activeCategory === category.id
                   ? 'bg-purple-gradient text-white'
-                  : 'bg-gray-100 dark:bg-dark-accent text-gray-600 dark:text-dark-muted hover:bg-gray-200 dark:hover:bg-dark-accent/70'
+                  : 'bg-white/30 dark:bg-dark-accent/30 backdrop-blur-md border border-white/20 dark:border-white/10 text-gray-700 dark:text-dark-text hover:bg-white/40 dark:hover:bg-dark-accent/40'
               }`}
+              style={activeCategory !== category.id ? {
+                backdropFilter: 'blur(10px)',
+                WebkitBackdropFilter: 'blur(10px)'
+              } : {}}
             >
               {category.name}
             </button>
@@ -309,8 +327,12 @@ const CatalogPage: React.FC = () => {
                   className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
                     activeCollection === collection
                       ? 'bg-blue-500 text-white'
-                      : 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 hover:bg-purple-200 dark:hover:bg-purple-800/50'
+                      : 'bg-purple-500/20 backdrop-blur-md border border-purple-300/30 text-purple-800 dark:text-purple-200 hover:bg-purple-500/30'
                   }`}
+                  style={activeCollection !== collection ? {
+                    backdropFilter: 'blur(10px)',
+                    WebkitBackdropFilter: 'blur(10px)'
+                  } : {}}
                 >
                   {collection}
                 </button>

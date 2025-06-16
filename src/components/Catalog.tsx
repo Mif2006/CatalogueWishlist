@@ -50,8 +50,13 @@ const Catalog: React.FC<CatalogProps> = ({ items, onItemClick }) => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: index * 0.1 }}
-          className="bg-white dark:bg-dark-card rounded-2xl shadow-lg hover:shadow-2xl dark:shadow-dark-elegant border border-gray-100 dark:border-dark-accent overflow-hidden group cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:border-purple-200 dark:hover:border-purple-0"
+          className="bg-white/40 dark:bg-dark-card/40 backdrop-blur-xl border border-white/30 dark:border-white/10 rounded-2xl shadow-lg hover:shadow-2xl overflow-hidden group cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:border-purple-300/50 dark:hover:border-purple-400/30"
           onClick={() => onItemClick(item)}
+          style={{
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+            boxShadow: '0 8px 32px rgba(139, 92, 246, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+          }}
         >
           <div className="relative aspect-square overflow-hidden cursor-pointer" onClick={() => onItemClick(item)}>
             {item.isNew && (
@@ -95,7 +100,7 @@ const Catalog: React.FC<CatalogProps> = ({ items, onItemClick }) => {
               </button>
             </div>
           </div>
-          <div className="p-4 bg-gradient-to-b from-white to-gray-50/50 dark:from-dark-card dark:to-dark-card">
+          <div className="p-4 bg-gradient-to-b from-white/60 to-white/30 dark:from-dark-card/60 dark:to-dark-card/30 backdrop-blur-sm">
             <div className="flex justify-between items-start mb-3">
               <h3 className="text-sm font-serif text-gray-900 dark:text-dark-text line-clamp-2 font-medium">{item.name}</h3>
               <p className="text-lg font-serif text-purple-600 dark:text-purple-300 whitespace-nowrap ml-2 font-semibold">
@@ -109,7 +114,11 @@ const Catalog: React.FC<CatalogProps> = ({ items, onItemClick }) => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => onItemClick(item)}
-                className="flex-1 px-3 py-2 bg-white dark:bg-dark-accent border-2 border-purple-500 dark:border-purple-400 rounded-lg text-purple-600 dark:text-purple-400 font-medium text-xs hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all duration-200 flex items-center justify-center space-x-1 shadow-sm hover:shadow-md"
+                className="flex-1 px-3 py-2 bg-white/50 dark:bg-dark-accent/50 backdrop-blur-md border-2 border-purple-500/70 dark:border-purple-400/70 rounded-lg text-purple-700 dark:text-purple-300 font-medium text-xs hover:bg-purple-100/60 dark:hover:bg-purple-900/30 transition-all duration-200 flex items-center justify-center space-x-1 shadow-sm hover:shadow-md"
+                style={{
+                  backdropFilter: 'blur(10px)',
+                  WebkitBackdropFilter: 'blur(10px)'
+                }}
               >
                 <span>Learn More</span>
               </motion.button>

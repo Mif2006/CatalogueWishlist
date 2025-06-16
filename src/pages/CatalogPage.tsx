@@ -5,6 +5,7 @@ import Catalog from '../components/Catalog';
 import ProductDetailPage from './ProductDetailPage';
 import { useCatalogData } from '../hooks/useCatalogData';
 import type { CatalogItem } from '../hooks/useCatalogData';
+import backgroundImage from '../assets/purple2.jpeg';
 
 const categories = [
   { id: 'new', name: 'New Arrivals' },
@@ -133,7 +134,24 @@ const CatalogPage: React.FC = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen relative">
+      {/* Background Image */}
+      <div 
+        className="fixed inset-0 z-0"
+        style={{
+          backgroundImage: `url(${backgroundImage})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          backgroundAttachment: 'fixed'
+        }}
+      >
+        {/* Overlay for better readability */}
+        <div className="absolute inset-0 bg-white/85 dark:bg-dark-bg/85 backdrop-blur-sm"></div>
+      </div>
+      
+      {/* Content */}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -305,6 +323,7 @@ const CatalogPage: React.FC = () => {
           <Catalog key={`${activeCategory}-${activeCollection}-${searchQuery}`} items={filteredItems} onItemClick={handleItemClick} />
         </AnimatePresence>
       </motion.div>
+    </div>
     </div>
   );
 };

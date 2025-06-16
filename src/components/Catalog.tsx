@@ -2,18 +2,26 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Heart, Share2, ShoppingCart, Package } from 'lucide-react';
 import { useCart } from '../context/CartContext';
-import SizeSelectionModal from './SizeSelectionModal';
 import type { CatalogItem } from '../hooks/useCatalogData';
 
 interface CatalogProps {
   items: CatalogItem[];
   onItemClick: (item: CatalogItem) => void;
+  selectedProduct: CatalogItem | null;
+  setSelectedProduct: (product: CatalogItem | null) => void;
+  showSizeModal: boolean;
+  setShowSizeModal: (show: boolean) => void;
 }
 
-const Catalog: React.FC<CatalogProps> = ({ items, onItemClick }) => {
+const Catalog: React.FC<CatalogProps> = ({ 
+  items, 
+  onItemClick, 
+  selectedProduct, 
+  setSelectedProduct, 
+  showSizeModal, 
+  setShowSizeModal 
+}) => {
   const { dispatch, wishlist, toggleWishlist } = useCart();
-  const [selectedProduct, setSelectedProduct] = React.useState<CatalogItem | null>(null);
-  const [showSizeModal, setShowSizeModal] = React.useState(false);
   
   const handleAddToCart = (item: CatalogItem, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -26,11 +34,6 @@ const Catalog: React.FC<CatalogProps> = ({ items, onItemClick }) => {
       // If no sizes, add directly to cart
       dispatch({ type: 'ADD_ITEM', payload: { ...item, quantity: 1 } });
     }
-  };
-  
-  const closeSizeModal = () => {
-    setShowSizeModal(false);
-    setSelectedProduct(null);
   };
   
   if (items.length === 0) {
@@ -141,15 +144,6 @@ const Catalog: React.FC<CatalogProps> = ({ items, onItemClick }) => {
           </div>
         </motion.div>
       ))}
-      
-      {/* Size Selection Modal */}
-      {selectedProduct && (
-        <SizeSelectionModal
-          isOpen={showSizeModal}
-          onClose={closeSizeModal}
-          product={selectedProduct}
-        />
-      )}
     </div>
   );
 };

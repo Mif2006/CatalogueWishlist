@@ -2,6 +2,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { RefreshCw, AlertCircle, Search, X } from 'lucide-react';
 import Catalog from '../components/Catalog';
+import SizeSelectionModal from '../components/SizeSelectionModal';
 import ProductDetailPage from './ProductDetailPage';
 import { useCatalogData } from '../hooks/useCatalogData';
 import type { CatalogItem } from '../hooks/useCatalogData';
@@ -23,6 +24,8 @@ const CatalogPage: React.FC = () => {
   const [activeCollection, setActiveCollection] = React.useState<string | null>(null);
   const [searchQuery, setSearchQuery] = React.useState('');
   const [selectedProduct, setSelectedProduct] = React.useState<CatalogItem | null>(null);
+  const [selectedProductForSize, setSelectedProductForSize] = React.useState<CatalogItem | null>(null);
+  const [showSizeModal, setShowSizeModal] = React.useState(false);
   const { items, loading, error, refetch } = useCatalogData();
 
   const filteredItems = React.useMemo(() => {
@@ -88,6 +91,11 @@ const CatalogPage: React.FC = () => {
 
   const clearSearch = () => {
     setSearchQuery('');
+  };
+  
+  const closeSizeModal = () => {
+    setShowSizeModal(false);
+    setSelectedProductForSize(null);
   };
 
   // If a product is selected, show the product detail page
@@ -342,10 +350,27 @@ const CatalogPage: React.FC = () => {
         )}
         
         <AnimatePresence mode="wait">
-          <Catalog key={`${activeCategory}-${activeCollection}-${searchQuery}`} items={filteredItems} onItemClick={handleItemClick} />
+          <Catalog 
+            key={`${activeCategory}-${activeCollection}-${searchQuery}`} 
+            items={filteredItems} 
+            onItemClick={handleItemClick}
+            selectedProduct={selectedProductForSize}
+            setSelectedProduct={setSelectedProductForSize}
+            showSizeModal={showSizeModal}
+            setShowSizeModal={setShowSizeModal}
+          />
         </AnimatePresence>
       </motion.div>
     </div>
+    
+    {/* Size Selection Modal - Rendered at root level */}
+    {selectedProductForSize && (
+      <SizeSelectionModal
+        isOpen={showSizeModal}
+        onClose={closeSizeModal}
+        product={selectedProductForSize}
+      />
+    )}
     </div>
   );
 };

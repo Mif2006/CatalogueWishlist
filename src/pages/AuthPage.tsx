@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Lock, Eye, EyeOff, Loader, Chrome } from 'lucide-react';
-import { supabase } from '../lib/supabase';
 
 interface AuthPageProps {
   onAuthSuccess: () => void;
@@ -21,14 +20,20 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
     setError('');
 
     try {
-      const { data, error } = isLogin
-        ? await supabase.auth.signInWithPassword({ email, password })
-        : await supabase.auth.signUp({ email, password });
-
-      if (error) throw error;
-      if (data.user) {
-        onAuthSuccess();
+      // Simulate authentication delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Simple validation
+      if (!email || !password) {
+        throw new Error('Please fill in all fields');
       }
+      
+      if (password.length < 6) {
+        throw new Error('Password must be at least 6 characters');
+      }
+      
+      // Simulate successful authentication
+      onAuthSuccess();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
@@ -40,24 +45,11 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
     setLoading(true);
     setError('');
     try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: window.location.origin,
-          queryParams: {
-            access_type: 'offline',
-            prompt: 'consent'
-          }
-        }
-      });
-      if (error) {
-        if (error.message.includes('provider is not enabled')) {
-          throw new Error('Google authentication is not configured. Please try email/password login.');
-        }
-        throw error;
-      }
+      // Simulate Google sign-in delay
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      onAuthSuccess();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      setError('Google sign-in is not available in demo mode');
     } finally {
       setLoading(false);
     }
@@ -138,7 +130,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
                 className="w-full py-3 bg-purple-gradient rounded-xl text-white font-medium hover:opacity-90 transition-opacity flex items-center justify-center space-x-2 disabled:opacity-70"
               >
                 {loading ? (
-                  <Loader className="animate-spin\" size={20} />
+                  <Loader className="animate-spin" size={20} />
                 ) : (
                   <span>{isLogin ? 'Sign In' : 'Create Account'}</span>
                 )}
@@ -158,7 +150,8 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
 
             <button
               onClick={handleGoogleSignIn}
-              className="mt-6 w-full py-3 px-4 bg-white dark:bg-dark-accent border border-gray-200 dark:border-dark-accent rounded-xl text-jewelry-dark dark:text-dark-text font-medium hover:bg-gray-50 dark:hover:bg-dark-accent/70 transition-colors flex items-center justify-center space-x-2"
+              disabled={loading}
+              className="mt-6 w-full py-3 px-4 bg-white dark:bg-dark-accent border border-gray-200 dark:border-dark-accent rounded-xl text-jewelry-dark dark:text-dark-text font-medium hover:bg-gray-50 dark:hover:bg-dark-accent/70 transition-colors flex items-center justify-center space-x-2 disabled:opacity-70"
             >
               <Chrome size={20} className="text-[#4285F4]" />
               <span>Sign in with Google</span>

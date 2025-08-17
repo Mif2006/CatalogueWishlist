@@ -230,8 +230,8 @@ const CatalogPage: React.FC = () => {
               className="block w-full pl-10 pr-10 py-3 border border-white/20 dark:border-white/20 rounded-xl bg-black/30 dark:bg-black/30 backdrop-blur-md text-white dark:text-white placeholder-gray-300 dark:placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-400/50 dark:focus:ring-purple-400/50 focus:border-purple-400/70 dark:focus:border-purple-400/70 transition-all"
               style={{
                 backdropFilter: 'blur(15px)',
-                WebkitBackdropFilter: 'blur(15px)'
-              }}
+                    ? 'bg-blue-500 text-white'
+                    : 'bg-purple-500/30 backdrop-blur-md border border-purple-400/40 text-purple-200 dark:text-purple-200 hover:bg-purple-500/40'
             />
             {searchQuery && (
               <button
